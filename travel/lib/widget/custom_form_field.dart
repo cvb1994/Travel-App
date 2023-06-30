@@ -1,10 +1,13 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 
 class CustomFormField extends StatefulWidget {
   const CustomFormField(
-      {super.key, required this.fieldName, required this.textHint});
+      {super.key, required this.fieldName, required this.textHint, required this.obscureText});
   final String fieldName;
   final String textHint;
+  final bool obscureText;
 
   @override
   State<CustomFormField> createState() => _CustomFormFieldState();
@@ -33,6 +36,7 @@ class _CustomFormFieldState extends State<CustomFormField> {
         Padding(
             padding: EdgeInsets.all(10),
             child: TextField(
+              obscureText: widget.obscureText,
               focusNode: _focus,
               decoration: InputDecoration(
                 focusedBorder: const OutlineInputBorder(

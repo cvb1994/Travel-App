@@ -64,7 +64,7 @@ class WelcomeScreen extends StatelessWidget {
               ),
               const Align(
                 alignment: Alignment.bottomCenter,
-                child: CustomButton(title: "Next", page: LoginPage(),),
+                child: CustomButton(title: "Next", page: LoginPage(), color: Colors.amber,),
               )
             ],
           ),)

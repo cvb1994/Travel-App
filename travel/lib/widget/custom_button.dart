@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget{
-  const CustomButton({super.key, required this.title, required this.page});
+  const CustomButton({super.key, required this.title, required this.page, required this.color});
   final Widget page;
   final String title;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +15,9 @@ class CustomButton extends StatelessWidget{
       ),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.amber
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(width: 1, style: BorderStyle.solid, color: Color.fromARGB(249, 133, 129, 129)),
+          color: color
         ),
         padding: const EdgeInsetsDirectional.symmetric(vertical: 15),
         child: Center(
