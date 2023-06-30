@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel/widget/custom_button.dart';
+import 'package:travel/widget/custom_form_field.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -8,8 +9,7 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage>{
-  
+class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     double logoBox = MediaQuery.of(context).size.height * 0.3;
@@ -23,41 +23,42 @@ class _LoginPageState extends State<LoginPage>{
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: paddingSizeWidth),
-        child: Column(
-          children: [
-            SizedBox(
-              height: logoBox,
-              child: const Center(
-                child: Text(
-                  "Travel",
+        child: Column(children: [
+          SizedBox(
+            height: logoBox,
+            child: const Center(
+              child: Text("Travel",
                   style: TextStyle(
-                    color: Colors.white, 
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30 )
-                ),
-              ),
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30)),
             ),
-            SizedBox(
-              height: loginBox,
-              child: Column(
-                children: [
-                  TextField(
-                      controller: emailController,
-                      decoration: const InputDecoration(hintText: 'E-Mail'),
-                    ),
-                  TextField(
-                      controller: passwordController,
-                      decoration: const InputDecoration(hintText: 'Pass'),
-                    ),
-                ],
-              ),
+          ),
+          SizedBox(
+            height: loginBox,
+            child: Column(
+              children: [
+                // TextField(
+                //   controller: emailController,
+                //   decoration: const InputDecoration(hintText: 'E-Mail'),
+                // ),
+                // TextField(
+                //   controller: passwordController,
+                //   decoration: const InputDecoration(hintText: 'Pass'),
+                // ),
+                CustomFormField(
+                    fieldName: 'Email', textHint: 'Enter Your Email'),
+                CustomFormField(
+                    fieldName: 'Passwword', textHint: 'Enter Your Password')
+              ],
             ),
-            SizedBox(
-              height: buttonBox,
-              child: Row(),
-            ),
-          ]),),
+          ),
+          SizedBox(
+            height: buttonBox,
+            child: Row(),
+          ),
+        ]),
+      ),
     );
   }
-
 }
