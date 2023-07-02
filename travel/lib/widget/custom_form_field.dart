@@ -41,7 +41,7 @@ class _CustomFormFieldState extends State<CustomFormField> {
     return Stack(
       children: [
         Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsetsDirectional.symmetric(vertical: 10),
             child: TextFormField(
               validator: (value) {
                 if (widget.isRequired) {

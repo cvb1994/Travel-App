@@ -7,6 +7,8 @@ import 'package:travel/widget/custom_checkbox.dart';
 import 'package:travel/enum/reponse_enum.dart';
 import 'package:travel/model/response_model.dart';
 import 'package:travel/util/custom_notify.dart';
+import 'package:travel/pages/auth/create_account.dart';
+import 'package:travel/pages/dashboard.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -22,8 +24,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     CustomNotify notify = CustomNotify(context);
     double logoBox = MediaQuery.of(context).size.height * 0.4;
-    double loginBox = MediaQuery.of(context).size.height * 0.3;
-    double buttonBox = MediaQuery.of(context).size.height * 0.3;
     double paddingSizeWidth = MediaQuery.of(context).size.width * 0.1;
 
     final emailController = TextEditingController();
@@ -38,6 +38,7 @@ class _LoginPageState extends State<LoginPage> {
         resp.then((value) {
           ResponseModel respDto = value;
           if (respDto.responseCode == ResponseCodeEnum.SUCCESS) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Dashboard()));
           } else {
             notify.showNotify(respDto.message!);
           }
@@ -45,22 +46,6 @@ class _LoginPageState extends State<LoginPage> {
           notify.showNotify(e);
         });
       }
-    }
-
-    void signup() {
-      Future? resp = context
-          .read<AuthProvider>()
-          .signup(emailController.text, passwordController.text);
-
-      resp.then((value) {
-        ResponseModel respDto = value;
-        if (respDto.responseCode == ResponseCodeEnum.SUCCESS) {
-        } else {
-          notify.showNotify(respDto.message!);
-        }
-      }).catchError((e) {
-        notify.showNotify(e);
-      });
     }
 
     return Scaffold(
@@ -89,8 +74,8 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: false,
                       isRequired: true,
                     ),
-                    SizedBox(
-                      height: 10,
+                    const SizedBox(
+                      height: 20,
                     ),
                     CustomFormField(
                         controller: passwordController,
@@ -114,10 +99,15 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     CustomButton(
-                        func: signup,
+                        func: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const CreateAccountPage()),
+                          )
+                        },
                         title: "Create Account",
                         color: Colors.white),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     CustomButton(
