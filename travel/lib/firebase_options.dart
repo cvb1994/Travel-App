@@ -20,6 +20,9 @@ class DefaultFirebaseOptions {
       return web;
     }
     switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return android;
+
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -46,4 +49,15 @@ class DefaultFirebaseOptions {
       storageBucket: "travel-612a2.appspot.com",
       messagingSenderId: "264196876413",
       appId: "1:264196876413:web:41a55d359bf5d10b77e914");
+
+  static const FirebaseOptions android = FirebaseOptions(
+    authDomain: "travel-612a2.firebaseapp.com",
+    apiKey: 'AIzaSyCsXR8FuUH5cJDkdh60b3LcisMGjHzmw6o',
+    appId: '1:264196876413:android:ac04deed3f880ba877e914',
+    messagingSenderId: '264196876413',
+    projectId: 'travel-612a2',
+    databaseURL:
+        'https://travel-612a2-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'travel-612a2.appspot.com',
+  );
 }

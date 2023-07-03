@@ -23,7 +23,7 @@ class WelcomeScreen extends StatelessWidget {
         body: Container(
             decoration: const BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage("image/welcome_wallpaper.jpg"),
+                    image: AssetImage("assets/image/welcome_wallpaper.jpg"),
                     fit: BoxFit.cover)),
             child: Padding(
               padding: EdgeInsetsDirectional.only(
@@ -51,7 +51,7 @@ class WelcomeScreen extends StatelessWidget {
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 70)),
+                                    fontSize: 55)),
                           ),
                           Align(
                             alignment: AlignmentDirectional.bottomStart,

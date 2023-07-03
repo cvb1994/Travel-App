@@ -1,20 +1,21 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 
 class CustomFormField extends StatefulWidget {
-  const CustomFormField(
-      {super.key,
-      required this.fieldName,
-      required this.textHint,
-      required this.obscureText,
-      required this.controller,
-      required this.isRequired});
+  const CustomFormField({
+    super.key,
+    required this.fieldName,
+    required this.textHint,
+    required this.obscureText,
+    required this.controller,
+    required this.isRequired,
+    this.validator,
+  });
   final String fieldName;
   final String textHint;
   final bool obscureText;
   final bool isRequired;
   final TextEditingController controller;
+  final String? Function(String?)? validator;
 
   @override
   State<CustomFormField> createState() => _CustomFormFieldState();
@@ -43,14 +44,7 @@ class _CustomFormFieldState extends State<CustomFormField> {
         Padding(
             padding: const EdgeInsetsDirectional.symmetric(vertical: 10),
             child: TextFormField(
-              validator: (value) {
-                if (widget.isRequired) {
-                  if (value == null || value.isEmpty) {
-                    return "Vui lòng nhập";
-                  }
-                }
-                return null;
-              },
+              validator: widget.validator,
               controller: widget.controller,
               obscureText: widget.obscureText,
               focusNode: _focus,
