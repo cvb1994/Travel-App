@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:travel/widget/custom_navigation.dart';
 
 class Dashboard extends StatefulWidget {
+  static const routerName = "/dashboard";
   const Dashboard({super.key});
 
   @override
@@ -11,8 +12,9 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(child: Text("Hi Friends"),),
+    return const Scaffold(
+      body: Center(child: Text("Hi Friends")),
+      bottomNavigationBar: CustomNavigationBar(currentRouteName: Dashboard.routerName,),
     );
   }
 

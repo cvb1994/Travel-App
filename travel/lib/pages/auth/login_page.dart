@@ -42,8 +42,8 @@ class _LoginPageState extends State<LoginPage> {
           ResponseModel respDto = value;
           if (respDto.responseCode == ResponseCodeEnum.SUCCESS) {
             EasyLoading.dismiss();
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const Dashboard()));
+            Navigator.of(context).pushNamed(Dashboard.routerName);
+            //Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Dashboard()));
           } else {
             EasyLoading.dismiss();
             notify.showNotify(respDto.message!);

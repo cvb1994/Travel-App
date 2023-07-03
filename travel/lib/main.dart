@@ -6,6 +6,9 @@ import 'package:travel/firebase_options.dart';
 import 'package:travel/pages/welcome_page.dart';
 import 'package:travel/provider/auth_provider.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:travel/pages/dashboard.dart';
+import 'package:travel/pages/favorite_page.dart';
+import 'package:travel/pages/profile_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +34,37 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: WelcomeScreen(),
       builder: EasyLoading.init(),
+      onGenerateRoute: (settings){
+        if (settings.name == Dashboard.routerName) {
+          return MaterialPageRoute(
+            builder: (context) {
+              return const Dashboard();
+            },
+          );
+        }
+        if (settings.name == FavoritePage.routerName) {
+          return MaterialPageRoute(
+            builder: (context) {
+              return const FavoritePage();
+            },
+          );
+        }
+        if (settings.name == ProfilePage.routerName) {
+          return MaterialPageRoute(
+            builder: (context) {
+              return const ProfilePage();
+            },
+          );
+        }
+        return null;
+      },
+      onUnknownRoute: (settings) => MaterialPageRoute(
+        builder: (context) => Scaffold(
+          body: Center(
+            child: Text('Unknown router with name ${settings.name}'),
+          ),
+        ),
+      ),
     );
   }
 }
