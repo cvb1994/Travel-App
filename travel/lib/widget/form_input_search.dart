@@ -13,6 +13,8 @@ class InputSearch extends StatefulWidget {
 class _InputSearchState extends State<InputSearch> {
   @override
   Widget build(BuildContext context) {
+    double searchInputSize = MediaQuery.of(context).size.width * 0.7;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Container(
@@ -26,7 +28,7 @@ class _InputSearchState extends State<InputSearch> {
         child: Row(
           children: [
             SizedBox(
-              width: 280,
+              width: searchInputSize,
               child: TextFormField(
                 controller: widget.controller,
                 style: const TextStyle(fontSize: 16),

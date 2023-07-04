@@ -62,7 +62,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
               ),
               SizedBox(
                 width: titleWidth,
-                child: Text(username ?? ""),
+                child: Text(username ?? "", style: TextStyle(color: Colors.black),),
               ),
               SizedBox(
                 width: rightIconWidth,

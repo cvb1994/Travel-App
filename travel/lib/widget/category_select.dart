@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 
-class WidgetSelect extends StatefulWidget {
+class CategorySelect extends StatefulWidget {
   final String imagePath;
   final String title;
   bool isSelected;
 
-  WidgetSelect(
+  CategorySelect(
       {super.key,
       required this.imagePath,
       required this.title,
       required this.isSelected});
 
   @override
-  State<WidgetSelect> createState() => _WidgetSelectState();
+  State<CategorySelect> createState() => _CategorySelectState();
 }
 
-class _WidgetSelectState extends State<WidgetSelect> {
+class _CategorySelectState extends State<CategorySelect> {
   void onChanged() {
     setState(() {
       widget.isSelected = !widget.isSelected;

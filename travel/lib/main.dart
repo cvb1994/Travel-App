@@ -9,6 +9,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:travel/pages/dashboard.dart';
 import 'package:travel/pages/favorite_page.dart';
 import 'package:travel/pages/profile_page.dart';
+import 'package:travel/provider/category_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +20,9 @@ Future<void> main() async {
     providers: [
       ChangeNotifierProvider(
         create: (_) => AuthProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => CategoryProvider(),
       )
     ],
     child: const MyApp(),
