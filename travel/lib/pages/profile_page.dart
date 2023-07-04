@@ -9,14 +9,13 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage>{
+class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    String routeName = ModalRoute.of(context)!.settings.name!;
     return Scaffold(
       body: Center(child: Text("Profile")),
-      bottomNavigationBar: CustomNavigationBar(currentRouteName: routeName),
+      bottomNavigationBar:
+          CustomNavigationBar(currentRouteName: ProfilePage.routerName),
     );
   }
-
 }

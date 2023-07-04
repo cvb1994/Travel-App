@@ -13,6 +13,7 @@ import 'package:travel/widget/custom_appbar.dart';
 import 'package:travel/widget/custom_linearProgres.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:travel/util/custom_notify.dart';
+import 'package:travel/enum/appBarFuncEnum.dart';
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({super.key});
@@ -340,7 +341,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar.withFunc(onPrevious),
+      appBar: CustomAppBar.withFunc(
+        onTap: onPrevious,
+        funcType: AppBarFuncENum.OTHER,
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [

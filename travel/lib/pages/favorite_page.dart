@@ -9,14 +9,13 @@ class FavoritePage extends StatefulWidget {
   State<FavoritePage> createState() => _FavoritePageState();
 }
 
-class _FavoritePageState extends State<FavoritePage>{
+class _FavoritePageState extends State<FavoritePage> {
   @override
   Widget build(BuildContext context) {
-    String routeName = ModalRoute.of(context)!.settings.name!;
     return Scaffold(
       body: Center(child: Text("Favorite")),
-      bottomNavigationBar: CustomNavigationBar(currentRouteName: routeName),
+      bottomNavigationBar:
+          CustomNavigationBar(currentRouteName: FavoritePage.routerName),
     );
   }
-
 }

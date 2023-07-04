@@ -44,6 +44,7 @@ class AuthProvider extends ChangeNotifier {
           email: email, password: pass);
 
       await prefs.setString("userId", auth.user!.uid);
+      await prefs.setString("userName", auth.user!.uid);
 
       resp = ResponseModel(responseCode: ResponseCodeEnum.SUCCESS);
     } on FirebaseAuthException catch (e) {
