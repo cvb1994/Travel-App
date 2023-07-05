@@ -10,7 +10,6 @@ import 'package:firebase_database/firebase_database.dart';
 class AuthProvider extends ChangeNotifier {
   AuthProvider();
 
-  AuthModel? authModel;
   FirebaseAuth instance = FirebaseAuth.instance;
   FirebaseDatabase database = FirebaseDatabase.instance;
 

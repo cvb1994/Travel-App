@@ -9,19 +9,23 @@ class CategoryWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 150,
-      height: 60,
+      width: 170,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: Color.fromARGB(255, 197, 196, 192),
+        borderRadius: BorderRadius.circular(20),
+        color: Color.fromARGB(118, 216, 215, 213),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
         child: Row(
           children: [
             SizedBox(
+              width: 50,
               child: Image.network(imagePath)),
-            SizedBox(child: Center(child: Text(name),)),
+            Expanded(
+              child: Center(child: Text(
+                name,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),)),
           ],
         ),
       ),
