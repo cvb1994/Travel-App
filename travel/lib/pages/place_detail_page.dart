@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travel/enum/appBarFuncEnum.dart';
 import 'package:travel/model/category_model.dart';
+import 'package:travel/model/place_model.dart';
+import 'package:travel/provider/place_provider.dart';
 import 'package:travel/widget/categoryWidget.dart';
 import 'package:travel/widget/custom_navigation.dart';
 import 'package:travel/widget/custom_appbar.dart';
@@ -12,7 +14,8 @@ import 'package:travel/widget/placeWidget.dart';
 
 class PlaceDetailPage extends StatefulWidget {
   static const routerName = "/placeDetail";
-  const PlaceDetailPage({super.key});
+  final PlaceModelDto dto;
+  const PlaceDetailPage({super.key, required this.dto});
 
   @override
   State<PlaceDetailPage> createState() => _PlaceDetailPageState();
@@ -20,28 +23,38 @@ class PlaceDetailPage extends StatefulWidget {
 
 class _PlaceDetailPageState extends State<PlaceDetailPage> {
   late Future<List<CategoryModel>> futureListCategory;
+  late Future<PlaceModel> futurePlace;
   
   @override
   void initState() {
     // TODO: implement initState
-    var read = context.read<CategoryProvider>();
-    futureListCategory = read.getCategories();
+    futureListCategory = context.read<CategoryProvider>().getCategories();
+    futurePlace = context.read<PlaceProvider>().getPlace(widget.dto.id);
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+
     double paddingSizeWidth = MediaQuery.of(context).size.width * 0.05;
 
     return Scaffold(
-      appBar: CustomAppBar.withTitleFunc(funcType: AppBarFuncENum.FAV, title: 'Beach',),
+      appBar: CustomAppBar.withTitleFunc(funcType: AppBarFuncENum.FAV, title: widget.dto.name,),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: paddingSizeWidth, vertical: 15),
         child: ListView(
           children: [
             SizedBox(
               height: 220,
-              child: PlaceWidget(imagePath: "f2", name: "sdv", location: "sdf", rate: 2, width: double.infinity,),
+              child: FutureBuilder(
+                future: futurePlace,
+                builder: ((context, snapshot) {
+                  PlaceModel place = snapshot.data!;
+                  return PlaceWidget(imagePath: place.image!, name:  place.name!, location:  place.location!, rate:  place.rate!, width: double.infinity,);
+                }),
+              )
+              //child: PlaceWidget(imagePath: place.image!, name:  place.name!, location:  place.location!, rate:  place.rate!, width: double.infinity,),
             ),
             const SubRowMenu(name: "What's Included", buttonName: "",),
             SizedBox(
@@ -65,6 +78,15 @@ class _PlaceDetailPageState extends State<PlaceDetailPage> {
               )
             ),
             const SubRowMenu(name: "About Trip", buttonName: "",),
+            Container(
+              child: FutureBuilder(
+                future: futurePlace,
+                builder: ((context, snapshot) {
+                  PlaceModel place = snapshot.data!;
+                  return Text(place.des!);
+                }),
+              ),
+            ),
             const SubRowMenu(name: "Gallery Photo", buttonName: "",),
             const SubRowMenu(name: "Location", buttonName: "",),
             

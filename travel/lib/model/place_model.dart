@@ -18,6 +18,7 @@ class PlaceModel {
   });
 
   factory PlaceModel.fromMap(Map<dynamic, dynamic> data) => PlaceModel(
+    id: data['id'] as String?,
     name: data['name'] as String?,
     location: data['location'] as String?,
     rate: data['rate'] as double?,
@@ -25,5 +26,11 @@ class PlaceModel {
     price: data['price'] as double?,
     des: data['des'] as String?,
   );
+}
 
+class PlaceModelDto{
+  final String id;
+  final String name;
+
+  PlaceModelDto({required this.id,required this.name});
 }

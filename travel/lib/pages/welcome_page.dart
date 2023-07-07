@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:travel/widget/custom_button.dart';
 
 import 'package:travel/pages/auth/login_page.dart';
+import 'package:travel/widget/gallery_widget.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -11,7 +12,8 @@ class WelcomeScreen extends StatelessWidget {
     void onTap() {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
+        //MaterialPageRoute(builder: (context) => LoginPage()),
+        MaterialPageRoute(builder: (context) => GalleryWidget(placeId: "-NZgLmcdyu2L8UJlUoqC")),
       );
     }
 

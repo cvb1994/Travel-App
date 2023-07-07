@@ -8,7 +8,6 @@ class CategoryProvider extends ChangeNotifier{
 
   FirebaseDatabase database = FirebaseDatabase.instance;
 
-
   Future<List<CategoryModel>> getCategories() async{
     List<CategoryModel> listCate = [];
     try {

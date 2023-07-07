@@ -4,7 +4,7 @@ import 'package:travel/enum/appBarFuncEnum.dart';
 import 'package:travel/model/category_model.dart';
 import 'package:travel/model/place_model.dart';
 import 'package:travel/pages/place_detail_page.dart';
-import 'package:travel/provider/PlaceProvider.dart';
+import 'package:travel/provider/place_provider.dart';
 import 'package:travel/widget/categoryWidget.dart';
 import 'package:travel/widget/custom_navigation.dart';
 import 'package:travel/widget/custom_appbar.dart';
@@ -34,7 +34,7 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     // TODO: implement initState
     futureListCategory = context.read<CategoryProvider>().getCategories();
-    futureListPlace = context.read<PlaceProvider>().getPlace();
+    futureListPlace = context.read<PlaceProvider>().getPlaces();
     super.initState();
   }
 
@@ -96,7 +96,7 @@ class _DashboardState extends State<Dashboard> {
                     itemBuilder: (BuildContext context, int index){
                       return GestureDetector(
                         onTap: (){
-                          Navigator.of(context).pushNamed(PlaceDetailPage.routerName);
+                          Navigator.of(context).pushNamed(PlaceDetailPage.routerName, arguments: PlaceModelDto(id: places[index].id!, name: places[index].name!));
                         },
                         child: PlaceWidget(
                           imagePath: places[index].image!, 

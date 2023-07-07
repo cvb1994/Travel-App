@@ -3,15 +3,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travel/firebase_options.dart';
+import 'package:travel/model/place_model.dart';
 import 'package:travel/pages/place_detail_page.dart';
 import 'package:travel/pages/welcome_page.dart';
-import 'package:travel/provider/PlaceProvider.dart';
 import 'package:travel/provider/auth_provider.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:travel/pages/dashboard.dart';
 import 'package:travel/pages/favorite_page.dart';
 import 'package:travel/pages/profile_page.dart';
 import 'package:travel/provider/category_provider.dart';
+import 'package:travel/provider/place_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -66,9 +67,11 @@ class MyApp extends StatelessWidget {
           );
         }
         if (settings.name == PlaceDetailPage.routerName) {
+          final dto = settings.arguments as PlaceModelDto;
+
           return MaterialPageRoute(
             builder: (context) {
-              return const PlaceDetailPage();
+              return PlaceDetailPage(dto: dto);
             },
           );
         }
