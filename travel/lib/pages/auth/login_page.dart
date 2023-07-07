@@ -136,7 +136,10 @@ class _LoginPageState extends State<LoginPage> {
                       height: 15,
                     ),
                     CustomButton(
-                        func: login, title: "Sign In", color: Colors.amber
+                        //func: login, title: "Sign In", color: Colors.amber
+                        func: (){
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Dashboard()));
+                        }, title: "Sign In", color: Colors.amber
                       ),
                   ],
                 ),

@@ -12,7 +12,7 @@ class CategoryWidget extends StatelessWidget{
       width: 170,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Color.fromARGB(118, 216, 215, 213),
+        color: Color.fromARGB(118, 233, 232, 229),
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),

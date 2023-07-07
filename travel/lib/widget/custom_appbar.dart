@@ -17,7 +17,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   CustomAppBar.withFunc({super.key, required this.funcType, this.onTap});
 
   CustomAppBar.withTitleFunc(
-      {super.key, required this.funcType, this.onTap, this.title});
+      {super.key, required this.funcType, this.onTap, required this.title});
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
@@ -70,6 +70,35 @@ class _CustomAppBarState extends State<CustomAppBar> {
               ),
             ],
           ));
+
+    } else if((widget.funcType == AppBarFuncENum.FAV) ){
+      return Padding(
+        padding: EdgeInsets.only(
+            left: paddingSizeWidth, right: paddingSizeWidth, top: 50),
+        child: Row(
+          children: [
+            SizedBox(
+              width: leftIconWidth,
+              child: IconButton(
+                color: Colors.black,
+                onPressed: widget.onTap ??
+                    () {
+                      Navigator.of(context).pop();
+                    },
+                icon: const Icon(Icons.arrow_back_outlined
+              )),
+            ),
+            SizedBox(
+              width: titleWidth,
+              child: Center(child: Text(widget.title!, style: TextStyle(color: Colors.black))),
+            ),
+            SizedBox(
+              width: rightIconWidth,
+              child: Icon(Icons.favorite),
+            ),
+          ],
+        ));
+
     } else {
       return AppBar(
         backgroundColor: const Color.fromARGB(0, 0, 0, 0),
@@ -85,3 +114,4 @@ class _CustomAppBarState extends State<CustomAppBar> {
     }
   }
 }
+
