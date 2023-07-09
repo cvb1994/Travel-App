@@ -28,9 +28,9 @@ class PlaceModel {
   );
 }
 
-class PlaceModelDto{
-  final String id;
-  final String name;
+// class PlaceModelDto{
+//   final String id;
+//   final String name;
 
-  PlaceModelDto({required this.id,required this.name});
-}
+//   PlaceModelDto({required this.id,required this.name});
+// }

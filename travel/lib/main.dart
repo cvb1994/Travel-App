@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
           );
         }
         if (settings.name == PlaceDetailPage.routerName) {
-          final dto = settings.arguments as PlaceModelDto;
+          final dto = settings.arguments as PlaceModel;
 
           return MaterialPageRoute(
             builder: (context) {

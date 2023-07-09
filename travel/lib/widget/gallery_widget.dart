@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:loadmore/loadmore.dart';
 import 'package:provider/provider.dart';
 import 'package:travel/enum/appBarFuncEnum.dart';
 import 'package:travel/provider/place_provider.dart';
@@ -14,64 +13,84 @@ class GalleryWidget extends StatefulWidget{
 }
 
 class _GalleryWidgetState extends State<GalleryWidget>{
-  int place = 1;
-  int get count => listImage.length;
-  List<String> listImage = [];
+  int place = 3;
+  bool _isLoadMoreRunning = false;
 
-  late Future<String> futureImageUrl;
+  late Future<List<String>> futureImageUrl;
 
   @override
   void initState() {
     // TODO: implement initState
-    //futureImageUrl = context.read<PlaceProvider>().getPlaceImage(widget.placeId, place);
+    futureImageUrl = context.read<PlaceProvider>().getPlaceImage(widget.placeId, place);
 
     super.initState();
   }
 
-  void load() async {
-    print("load");
-    listImage.add(await context.read<PlaceProvider>().getPlaceImage(widget.placeId, place));
-    place++;
+  void wait2secont() async{
+    await Future.delayed(const Duration(seconds: 2));
     setState(() {
-      print("data count = ${listImage.length}");
+      _isLoadMoreRunning = false;
     });
   }
 
-  Future<void> _refresh() async {
-    await Future.delayed(const Duration(seconds: 0, milliseconds: 100));
-    listImage.clear();
-    //load();
-  }
+  void loadMore() {
+    if(_isLoadMoreRunning) return;
+    setState(() {
+      _isLoadMoreRunning = true;
+    });
 
-  Future<bool> _loadMore() async {
-    print("onLoadMore");
-    //await Future.delayed(const Duration(seconds: 0, milliseconds: 100));
-    load();
-    return true;
+    setState(() {
+      place+=2;
+      futureImageUrl = context.read<PlaceProvider>().getPlaceImage(widget.placeId, place);
+      wait2secont();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(funcType: AppBarFuncENum.OTHER),
-      body: RefreshIndicator(
-        onRefresh: _refresh,
-        child: LoadMore(
-          isFinish: count >= 5,
-          onLoadMore: _loadMore,
-          whenEmptyLoad: true,
-          delegate: const DefaultLoadMoreDelegate(),
-          child: ListView.builder(
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                child: Image.network(listImage[index]),
-              );
-            },
-            itemCount: count,
-          ),
-        ),
+      body: NotificationListener<ScrollNotification>(
+        onNotification: (ScrollNotification scrollInfo) {
+          if (scrollInfo.metrics.pixels <
+              scrollInfo.metrics.maxScrollExtent) {
+            loadMore();
+            return true;
+          }
+          return false;
+        },
+        child: FutureBuilder(
+          future: futureImageUrl,
+          builder: ((context, snapshot){
+            List<String> urls = snapshot.data!;
+            return ListView.separated(
+              itemCount: urls.length,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (BuildContext context, int index){
+                String url = urls[index];
+                return Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Image(
+                  repeat: ImageRepeat.noRepeat,
+                  image: NetworkImage(url),
+                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return const Padding(
+                      padding: EdgeInsets.all(20),
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    );
+                  },
+                ));
+              },
+              separatorBuilder: (context, index) => const SizedBox(
+                width: 15,
+              )
+            );
+          }),
       ),
-    );
+    ));
   }
 
 }

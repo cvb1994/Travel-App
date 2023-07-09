@@ -96,7 +96,8 @@ class _DashboardState extends State<Dashboard> {
                     itemBuilder: (BuildContext context, int index){
                       return GestureDetector(
                         onTap: (){
-                          Navigator.of(context).pushNamed(PlaceDetailPage.routerName, arguments: PlaceModelDto(id: places[index].id!, name: places[index].name!));
+
+                          Navigator.of(context).pushNamed(PlaceDetailPage.routerName, arguments: places[index]);
                         },
                         child: PlaceWidget(
                           imagePath: places[index].image!, 

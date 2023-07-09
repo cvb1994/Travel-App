@@ -22,7 +22,7 @@ class CustomButton extends StatelessWidget {
                 style: BorderStyle.solid,
                 color: Color.fromARGB(249, 133, 129, 129)),
             color: color),
-        padding: const EdgeInsetsDirectional.symmetric(vertical: 15),
+        padding: const EdgeInsetsDirectional.symmetric(vertical: 10),
         child: Center(
           child: Text(title,
               style: const TextStyle(

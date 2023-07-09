@@ -59,20 +59,23 @@ class PlaceProvider extends ChangeNotifier{
     }
   }
 
-  Future<String> getPlaceImage(String id, int place) async {
+  Future<List<String>> getPlaceImage(String id, int place) async {
+    List<String> listImage = [];
     try {
       DatabaseReference refCategory = database.ref("image/$id");
-      Query query = refCategory.limitToLast(place);
+      Query query = refCategory.limitToFirst(place);
       DataSnapshot snapshot = await query.get();
       
       if (snapshot.exists) {
-          final map = snapshot.value as Map<dynamic, dynamic>;
-
-          return map.values as String;
+        final map = snapshot.value as List<Object?>;
+        for (var m in map){
+          listImage.add(m as String);
+        }
+        return listImage;
 
       } else {
           print('No data available.');
-          return "nothing";
+          return listImage;
       }
     } catch (err) {
       print(err);
