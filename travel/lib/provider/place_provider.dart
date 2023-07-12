@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:travel/model/place_model.dart';
-import 'package:travel/model/response_model.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class PlaceProvider extends ChangeNotifier{

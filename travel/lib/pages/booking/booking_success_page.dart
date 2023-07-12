@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:travel/pages/selecte_place.dart';
+import 'package:travel/pages/dashboard.dart';
 import 'package:travel/widget/custom_button.dart';
 
-class CreatedWelcomeScreen extends StatelessWidget {
-  const CreatedWelcomeScreen({super.key});
+class BookingSuccessScreen extends StatelessWidget {
+  const BookingSuccessScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     void onTap() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const SelectPlaceScreen()),
-      );
+      Navigator.of(context).pushNamed(Dashboard.routerName);
     }
 
     double iconSize = MediaQuery.of(context).size.height * 0.5;
@@ -26,11 +23,7 @@ class CreatedWelcomeScreen extends StatelessWidget {
         children: [
           SizedBox(
             height: iconSize,
-            child: const Icon(
-              Icons.place_rounded,
-              color: Colors.amber,
-              size: 150,
-            ),
+            child: Image.asset("assets/icons/holiday_travel.png"),
           ),
           SizedBox(
               height: infoSize,
@@ -38,7 +31,7 @@ class CreatedWelcomeScreen extends StatelessWidget {
                 children: [
                   Center(
                     child: Text(
-                      "Successfully created an account",
+                      "Booking Successfully",
                       style: TextStyle(
                           fontSize: 27,
                           fontWeight: FontWeight.bold,
@@ -49,13 +42,15 @@ class CreatedWelcomeScreen extends StatelessWidget {
                     height: 10,
                   ),
                   Center(
-                    child: Text(
-                        "After this, you can explore any place you want. Enjoy it",
+                    child: Center(
+                      child: Text(
+                        "Get everything ready until it's time to go on a trip",
                         style: TextStyle(
                             fontSize: 15,
                             color: Color.fromARGB(255, 97, 95, 95),
                             fontWeight: FontWeight.normal,
                             height: 1.5)),
+                    ),
                   )
                 ],
               )),

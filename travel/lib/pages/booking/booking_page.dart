@@ -1,25 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:travel/model/place_model.dart';
+import 'package:travel/pages/booking/booking_success_page.dart';
 import 'package:travel/pages/booking/people_select_page.dart';
-import 'package:travel/pages/create_welcome.dart';
-import 'package:travel/provider/auth_provider.dart';
 
-import 'package:travel/enum/reponse_enum.dart';
-import 'package:travel/model/response_model.dart';
-import 'package:travel/util/validator.dart';
 import 'package:travel/widget/SubMenuWidget.dart';
-import 'package:travel/widget/custom_button.dart';
-import 'package:travel/widget/custom_form_field.dart';
 import 'package:travel/widget/custom_appbar.dart';
-import 'package:travel/widget/custom_linearProgres.dart';
-import 'package:flutter_switch/flutter_switch.dart';
-import 'package:travel/util/custom_notify.dart';
 import 'package:travel/enum/appBarFuncEnum.dart';
 import 'package:travel/pages/booking/date_select_page.dart';
 import 'package:intl/intl.dart';
+import 'package:travel/util/stringExtension.dart';
+import 'package:travel/widget/custom_button.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class BookingPage extends StatefulWidget {
   final PlaceModel place;
@@ -30,18 +22,22 @@ class BookingPage extends StatefulWidget {
 }
 
 class _BookingPageState extends State<BookingPage> {
-  String? dateRange;
+  String? date;
   bool isSelectDate = false;
   bool isSelectPeople = false;
   final dateRangeController = DateRangePickerController();
   final adultController = TextEditingController();
   final childController = TextEditingController();
   int totalPeople = 0;
+  double price = 0;
+  double priceVat = 0;
+  double priceTotal = 0;
 
   void saveSelectedDate(){
     setState(() {
-      dateRange = '${DateFormat('dd/MM/yyyy').format(dateRangeController.selectedRange!.startDate!)} -'
-            ' ${DateFormat('dd/MM/yyyy').format(dateRangeController.selectedRange!.endDate!)}';
+      DateTime selectedDate = dateRangeController.selectedDate!;
+
+      date = '${DateFormat('dd/MM/yyyy').format(selectedDate)}';
       isSelectDate = false;
     });
     
@@ -88,7 +84,7 @@ class _BookingPageState extends State<BookingPage> {
               children: [
                 const Text("Date", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                 const SizedBox(height: 5,),
-                Text(dateRange ?? "Please Select Date")
+                Text(date ?? "Please Select Date", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300))
               ],
             )),
             SizedBox(
@@ -105,7 +101,7 @@ class _BookingPageState extends State<BookingPage> {
             )
           ],
         ),
-        const SizedBox(height: 15,),
+        const SizedBox(height: 20,),
         Row(
           children: [
             Expanded(child: Column(
@@ -113,7 +109,7 @@ class _BookingPageState extends State<BookingPage> {
               children: [
                 const Text("People", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                 const SizedBox(height: 5,),
-                Text("${totalPeople == 0 ? "Please Select People Quantity" : totalPeople.toString()} people")
+                Text("${totalPeople == 0 ? "Select Quantity" : totalPeople.toString()} people", style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w300))
               ],
             )),
             SizedBox(
@@ -124,14 +120,64 @@ class _BookingPageState extends State<BookingPage> {
                     isSelectPeople = true;
                   });
                 },
-                child: Text("EDIT", textAlign: TextAlign.end,),
+                child: const Text("EDIT", textAlign: TextAlign.end,),
               ),
               
             )
           ],
         ),
-        const SizedBox(height: 15,),
+        const SizedBox(height: 20,),
         const SubRowMenu(name: "Price Detail", buttonName: "",),
+        Row(
+          children: [
+            Expanded(
+              child: Text("\$${widget.place.price} x $totalPeople people",
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w300)
+              )
+            ),
+            SizedBox(
+              width: 80,
+              child: Text("\$${price}", textAlign: TextAlign.end, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w300)),
+              
+            )
+          ],
+        ),
+        const SizedBox(height: 20,),
+        Row(
+          children: [
+            const Expanded(
+              child: Text("VAT 8%",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300)
+              )
+            ),
+            SizedBox(
+              width: 80,
+              child: Text("\$$priceVat", textAlign: TextAlign.end, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w300)),
+              
+            )
+          ],
+        ),
+        const SizedBox(height: 15,),
+        Container(
+          decoration: BoxDecoration(color: Color.fromARGB(200, 201, 200, 199)),
+          height: 1,
+        ),
+        const SizedBox(height: 15,),
+        Row(
+          children: [
+            const Expanded(
+              child: Text("Total",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300)
+              )
+            ),
+            SizedBox(
+              width: 80,
+              child: Text("\$$priceTotal", textAlign: TextAlign.end, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w300)),
+              
+            )
+          ],
+        ),
+
         
       ],
     ));
@@ -139,6 +185,16 @@ class _BookingPageState extends State<BookingPage> {
 
   @override
   Widget build(BuildContext context) {
+    void bookingSimulate() async{
+      EasyLoading.show(status: 'loading...');
+      await Future.delayed(const Duration(milliseconds: 1000));
+      EasyLoading.dismiss();
+      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const BookingSuccessScreen()),
+        );
+    }
+
     return Stack(
       children: [
         Scaffold(
@@ -146,11 +202,14 @@ class _BookingPageState extends State<BookingPage> {
           appBar: CustomAppBar.withFunc(
             funcType: AppBarFuncENum.OTHER,
           ),
+          bottomNavigationBar: SizedBox(
+            height: 70,
+            child: Padding(padding: EdgeInsets.all(10), child: CustomButton(title: 'Booking', color: Colors.amber, func: bookingSimulate,))
+          ),
           body: mainBookingPage(),
         ),
         isSelectDate ? DateSelectPage(
           controller: dateRangeController,
-          dateRange : dateRange,
           onCancel: () {
             setState(() {
               isSelectDate = false;
@@ -177,6 +236,9 @@ class _BookingPageState extends State<BookingPage> {
               } on Exception {}
               
               totalPeople = adults + child;
+              price = (widget.place.price!*totalPeople).toPrecision(2);
+              priceVat = (price*0.08).toPrecision(2);
+              priceTotal = price + priceVat;
             });
           }, 
           childController: childController, 

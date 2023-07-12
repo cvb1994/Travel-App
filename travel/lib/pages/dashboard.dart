@@ -4,6 +4,7 @@ import 'package:travel/enum/appBarFuncEnum.dart';
 import 'package:travel/model/category_model.dart';
 import 'package:travel/model/place_model.dart';
 import 'package:travel/pages/place_detail_page.dart';
+import 'package:travel/pages/searching_page.dart';
 import 'package:travel/provider/place_provider.dart';
 import 'package:travel/widget/SubMenuWidget.dart';
 import 'package:travel/widget/categoryWidget.dart';
@@ -62,7 +63,12 @@ class _DashboardState extends State<Dashboard> {
                     letterSpacing: 1.5),
               ),
             ),
-            InputSearch(controller: controller),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushNamed(SearchingPage.routerName);
+              },
+              child: InputSearch(controller: controller, isEnable: false,),
+            ),
             const SubRowMenu(name: "Choose Category", buttonName: "See All",),
             SizedBox(
               height: 70,

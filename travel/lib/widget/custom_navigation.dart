@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel/pages/favorite_page.dart';
 import 'package:travel/pages/dashboard.dart';
-import 'package:travel/pages/profile_page.dart';
+import 'package:travel/pages/profile/profile_page.dart';
 
 class CustomNavigationBar extends StatelessWidget {
   final String currentRouteName;

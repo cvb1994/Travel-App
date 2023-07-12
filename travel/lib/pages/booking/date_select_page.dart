@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class DateSelectPage extends StatefulWidget{
-  String? dateRange;
   VoidCallback onCancel;
   VoidCallback onSave;
   DateRangePickerController controller;
-  DateSelectPage({super.key, this.dateRange, required this.onCancel, required this.onSave, required this.controller});
+  DateSelectPage({super.key, required this.onCancel, required this.onSave, required this.controller});
 
   @override
   State<DateSelectPage> createState() => _DateSelectPageState();
@@ -49,7 +48,7 @@ class _DateSelectPageState extends State<DateSelectPage>{
                   height: 450,
                   child: SfDateRangePicker(
                     controller: widget.controller,
-                    selectionMode: DateRangePickerSelectionMode.range,
+                    selectionMode: DateRangePickerSelectionMode.single,
                     initialSelectedRange: PickerDateRange(
                         DateTime.now().subtract(const Duration(days: 4)),
                         DateTime.now().add(const Duration(days: 3))),

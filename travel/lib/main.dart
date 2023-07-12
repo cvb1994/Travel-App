@@ -5,12 +5,13 @@ import 'package:provider/provider.dart';
 import 'package:travel/firebase_options.dart';
 import 'package:travel/model/place_model.dart';
 import 'package:travel/pages/place_detail_page.dart';
+import 'package:travel/pages/searching_page.dart';
 import 'package:travel/pages/welcome_page.dart';
 import 'package:travel/provider/auth_provider.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:travel/pages/dashboard.dart';
 import 'package:travel/pages/favorite_page.dart';
-import 'package:travel/pages/profile_page.dart';
+import 'package:travel/pages/profile/profile_page.dart';
 import 'package:travel/provider/category_provider.dart';
 import 'package:travel/provider/place_provider.dart';
 
@@ -72,6 +73,13 @@ class MyApp extends StatelessWidget {
           return MaterialPageRoute(
             builder: (context) {
               return PlaceDetailPage(dto: dto);
+            },
+          );
+        }
+        if (settings.name == SearchingPage.routerName) {
+          return MaterialPageRoute(
+            builder: (context) {
+              return const SearchingPage();
             },
           );
         }

@@ -3,8 +3,9 @@ import 'package:flutter/services.dart';
 
 class InputSearch extends StatefulWidget {
   final TextEditingController controller;
+  final bool isEnable;
 
-  const InputSearch({super.key, required this.controller});
+  const InputSearch({super.key, required this.controller, required this.isEnable});
 
   @override
   State<InputSearch> createState() => _InputSearchState();
@@ -30,6 +31,8 @@ class _InputSearchState extends State<InputSearch> {
             SizedBox(
               width: searchInputSize,
               child: TextFormField(
+                enabled: widget.isEnable,
+                autofocus: true,
                 controller: widget.controller,
                 style: const TextStyle(fontSize: 16),
                 decoration:

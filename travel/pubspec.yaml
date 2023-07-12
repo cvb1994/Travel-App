@@ -48,6 +48,8 @@ dependencies:
   loadmore: ^2.1.0
   syncfusion_flutter_datepicker: ^21.1.37
   intl: ^0.17.0
+  localstorage: ^4.0.1+4
+  image_picker: ^0.8.4
 
 dev_dependencies:
   flutter_test:
