@@ -6,6 +6,7 @@ import 'package:travel/enum/appBarFuncEnum.dart';
 import 'package:travel/model/user_model.dart';
 import 'package:travel/provider/auth_provider.dart';
 import 'package:travel/widget/custom_appbar.dart';
+import 'package:travel/widget/custom_button.dart';
 import 'package:travel/widget/custom_form_field.dart';
 import 'package:travel/widget/custom_navigation.dart';
 import 'package:image_picker/image_picker.dart';
@@ -21,6 +22,9 @@ class ProfileEditPage extends StatefulWidget {
 class _ProfileEditPageState extends State<ProfileEditPage> {
   late Future<UserModel> futureUserModel;
   final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final addressController = TextEditingController();
+  final phoneController = TextEditingController();
   final picker = ImagePicker();
   String urlImage = "";
   File? galleryFile;
@@ -33,7 +37,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     super.initState();
   }
 
-  void loadImage() async{
+  void loadImage() async {
     XFile? image = await picker.pickImage(source: ImageSource.gallery);
     setState(() {
       urlImage = image!.path;
@@ -81,6 +85,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       () {
         if (xfilePick != null) {
           galleryFile = File(pickedFile!.path);
+          urlImage = pickedFile.path;
         } else {
           ScaffoldMessenger.of(context).showSnackBar(// is this context <<<
               const SnackBar(content: Text('Nothing is selected')));
@@ -95,83 +100,128 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
     return Scaffold(
       appBar: CustomAppBar(funcType: AppBarFuncENum.OTHER),
-      body: Padding(
-        padding: EdgeInsets.all(paddingSizeWidth),
-        child: Column(
-          children: [
-            Text("Personal Infomation"),
-            const SizedBox(height: 20,),
-            Stack(
-              alignment: Alignment.topCenter,
+      bottomNavigationBar: SizedBox(
+        height: 100,
+        child: Padding(
+            padding: EdgeInsets.all(20),
+            child: CustomButton(
+              color: Colors.amber,
+              func: () {},
+              title: 'Update',
+            )),
+      ),
+      body: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+        child: Padding(
+            padding: EdgeInsets.all(paddingSizeWidth),
+            child: Column(
               children: [
-                SizedBox(
-                  height: 150,
+                const Text(
+                  "Personal Infomation",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                Positioned(
-                  child: SizedBox( 
-                    height: 120,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child: urlImage.isNotEmpty ? Image.file(File(urlImage)) : Image.network("https://img.freepik.com/free-icon/user_318-563642.jpg?w=360"),
+                const SizedBox(
+                  height: 20,
+                ),
+                Stack(
+                  alignment: Alignment.topCenter,
+                  children: [
+                    const SizedBox(
+                      height: 150,
                     ),
-                  )
+                    SizedBox(
+                      height: 120,
+                      width: 120,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: urlImage.isNotEmpty
+                            ? Image.file(
+                                File(urlImage),
+                                fit: BoxFit.cover,
+                              )
+                            : Image.network(
+                                "https://img.freepik.com/free-icon/user_318-563642.jpg?w=360"),
+                      ),
+                    ),
+                    Positioned(
+                        bottom: 15,
+                        child: GestureDetector(
+                            onTap: () {
+                              _showPicker(context: context);
+                            },
+                            child: Container(
+                              height: 30,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 20),
+                                child: Center(
+                                  child: Row(
+                                    children: const [
+                                      Icon(
+                                        Icons.camera_alt,
+                                        size: 16,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text("Edit")
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ))),
+                  ],
                 ),
-                Positioned(
-                  bottom: 15,
-                  child: GestureDetector(
-                    onTap: (){
-                      _showPicker(context: context);
-                    },
-                    child: Container(
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                      ),
-                      child: const  Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20), 
-                        child: Center(
-                          child: Row(
-                            children: [
-                              Icon(Icons.camera_alt, size: 16,),
-                              SizedBox(width: 5,),
-                              Text("Edit")
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
-                  )
+                const SizedBox(
+                  height: 20,
+                ),
+                CustomFormField(
+                  controller: firstNameController,
+                  fieldName: 'First Name',
+                  isRequired: false,
+                  obscureText: false,
+                  textHint: 'Input First Name',
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                CustomFormField(
+                  controller: lastNameController,
+                  fieldName: 'Last Name',
+                  isRequired: false,
+                  obscureText: false,
+                  textHint: 'Input Last Name',
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                CustomFormField(
+                  controller: phoneController,
+                  fieldName: 'Phone',
+                  isRequired: false,
+                  obscureText: false,
+                  textHint: 'Input Phone Number',
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                CustomFormField(
+                  controller: addressController,
+                  fieldName: 'Address',
+                  isRequired: false,
+                  obscureText: false,
+                  textHint: 'Input Address',
+                ),
+                const SizedBox(
+                  height: 20,
                 ),
               ],
-            ),
-            const SizedBox(height: 20,),
-            CustomFormField(
-              controller: firstNameController, 
-              fieldName: 'First Name', 
-              isRequired: false, 
-              obscureText: false, 
-              textHint: 'Input First Name',
-
-            ),
-            CustomFormField(
-              controller: firstNameController, 
-              fieldName: 'Last Name', 
-              isRequired: false, 
-              obscureText: false, 
-              textHint: 'Input Last Name',
-
-            ),
-            CustomFormField(
-              controller: firstNameController, 
-              fieldName: 'Address', 
-              isRequired: false, 
-              obscureText: false, 
-              textHint: 'Input Address',
-
-            ),
-          ],
-        )),
+            )),
+      ),
     );
   }
 }

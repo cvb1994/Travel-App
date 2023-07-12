@@ -46,10 +46,10 @@ dependencies:
   shared_preferences: ^2.2.0
   firebase_storage: ^11.2.4
   loadmore: ^2.1.0
-  syncfusion_flutter_datepicker: ^21.1.37
+  syncfusion_flutter_datepicker: ^20.4.52
   intl: ^0.17.0
   localstorage: ^4.0.1+4
-  image_picker: ^0.8.4
+  image_picker: ^1.0.1
 
 dev_dependencies:
   flutter_test:

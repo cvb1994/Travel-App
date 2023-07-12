@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,12 +8,14 @@ import 'package:travel/model/response_model.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:travel/model/user_model.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class AuthProvider extends ChangeNotifier {
   AuthProvider();
 
   FirebaseAuth instance = FirebaseAuth.instance;
   FirebaseDatabase database = FirebaseDatabase.instance;
+  final storage = FirebaseStorage.instance;
 
   Future<ResponseModel> signup(
       String email, String pass, String firstName, String lastName) async {
@@ -50,11 +54,10 @@ class AuthProvider extends ChangeNotifier {
       DatabaseReference refUser = database.ref("users/${auth.user!.uid}");
       DataSnapshot snapshot = await refUser.get();
       if (snapshot.exists) {
-          final map = snapshot.value as Map<dynamic, dynamic>;
-          final LocalStorage storage = new LocalStorage('userJson');
-          storage.setItem("user", map);
+        final map = snapshot.value as Map<dynamic, dynamic>;
+        final LocalStorage storage = new LocalStorage('userJson');
+        storage.setItem("user", map);
       }
-
     } on FirebaseAuthException catch (e) {
       resp = ResponseModel(
           responseCode: ResponseCodeEnum.FAIL, message: e.message);
@@ -93,7 +96,7 @@ class AuthProvider extends ChangeNotifier {
   // }
 
   Future<UserModel> getUser() async {
-  try {
+    try {
       final sharePref = await SharedPreferences.getInstance();
       String userId = sharePref.getString("userId") ?? "";
       userId = "Ld8KGOQbOLgethfogvB5bCDblDp2";
@@ -102,22 +105,23 @@ class AuthProvider extends ChangeNotifier {
       DataSnapshot snapshot = await refUser.get();
 
       if (snapshot.exists) {
-          final map = snapshot.value as Map<dynamic, dynamic>;
-          var user = UserModel();
-          user = UserModel.fromJson(map);
-          user.id = userId;
+        final map = snapshot.value as Map<dynamic, dynamic>;
+        var user = UserModel();
+        user = UserModel.fromJson(map);
+        user.id = userId;
 
-          return user;
-
+        return user;
       } else {
-          print('No data available.');
-          return new UserModel();
+        print('No data available.');
+        return new UserModel();
       }
     } catch (err) {
       print(err);
       rethrow;
     }
-  } 
+  }
+
+  Future<String> uploadImage(File file) {
+    final storageRef = FirebaseStorage.instance.ref();
+  }
 }
-
-

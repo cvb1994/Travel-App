@@ -27,7 +27,7 @@ class BookingSuccessScreen extends StatelessWidget {
           ),
           SizedBox(
               height: infoSize,
-              child: const Column(
+              child: Column(
                 children: [
                   Center(
                     child: Text(
@@ -44,12 +44,12 @@ class BookingSuccessScreen extends StatelessWidget {
                   Center(
                     child: Center(
                       child: Text(
-                        "Get everything ready until it's time to go on a trip",
-                        style: TextStyle(
-                            fontSize: 15,
-                            color: Color.fromARGB(255, 97, 95, 95),
-                            fontWeight: FontWeight.normal,
-                            height: 1.5)),
+                          "Get everything ready until it's time to go on a trip",
+                          style: TextStyle(
+                              fontSize: 15,
+                              color: Color.fromARGB(255, 97, 95, 95),
+                              fontWeight: FontWeight.normal,
+                              height: 1.5)),
                     ),
                   )
                 ],

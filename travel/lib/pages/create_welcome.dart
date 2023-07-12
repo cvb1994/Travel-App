@@ -34,7 +34,7 @@ class CreatedWelcomeScreen extends StatelessWidget {
           ),
           SizedBox(
               height: infoSize,
-              child: const Column(
+              child: Column(
                 children: [
                   Center(
                     child: Text(

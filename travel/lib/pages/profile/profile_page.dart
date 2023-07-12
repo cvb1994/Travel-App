@@ -37,7 +37,9 @@ class _ProfilePageState extends State<ProfilePage> {
         padding: EdgeInsets.all(paddingSizeWidth),
         child: Column(
           children: [
-            const SizedBox(height: 30,),
+            const SizedBox(
+              height: 30,
+            ),
             const Padding(
               padding: EdgeInsetsDirectional.symmetric(vertical: 20),
               child: Text(
@@ -48,99 +50,112 @@ class _ProfilePageState extends State<ProfilePage> {
                     letterSpacing: 1.5),
               ),
             ),
-            const SizedBox(height: 20,),
-            FutureBuilder(
-              future: futureUserModel,
-              builder: ((context, snapshot){
-                UserModel user = snapshot.data!;
-                return Column(
-                  children: [
-                    SizedBox(
-                      height: 60,
-                      child:  Row(
-                        children: [
-                          SizedBox(
-                            width: 60,
-                            child: Image.network(user.image!),
-                          ),
-                          const SizedBox(width: 10,),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Hello ${user.firstName!} ${user.lastName!}"),
-                            ],)
-                        ],
-                      ),
-                    ),
-                  ],
-                );
-              })
+            const SizedBox(
+              height: 20,
             ),
-            const SizedBox(height: 20,),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ProfileEditPage()));
-                },
-                child: Container(
-                  height: 60,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: const Color.fromARGB(255, 180, 178, 178), width: 0.5)
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Row(
-                      children: [
-                        Expanded(child: Text("Personal Infomation")),
-                        SizedBox(
-                          width: 20,
-                          child: Icon(Icons.person),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20,),
-              Container(
+            FutureBuilder(
+                future: futureUserModel,
+                builder: ((context, snapshot) {
+                  UserModel user = snapshot.data!;
+                  return Column(
+                    children: [
+                      SizedBox(
+                        height: 60,
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 60,
+                              child: Image.network(user.image!),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                    "Hello ${user.firstName!} ${user.lastName!}"),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                })),
+            const SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const ProfileEditPage()));
+              },
+              child: Container(
                 height: 60,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: const Color.fromARGB(255, 180, 178, 178), width: 0.5)
-                ),
-                child: const Padding(
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                        color: const Color.fromARGB(255, 180, 178, 178),
+                        width: 0.5)),
+                child: Padding(
                   padding: EdgeInsets.all(20),
                   child: Row(
                     children: [
-                      Expanded(child: Text("FAQ")),
+                      Expanded(child: Text("Personal Infomation")),
                       SizedBox(
                         width: 20,
-                        child: Icon(Icons.message),
+                        child: Icon(Icons.person),
                       )
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 20,),
-              Container(
-                height: 60,
-                decoration: BoxDecoration(
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              height: 60,
+              decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: const Color.fromARGB(255, 180, 178, 178), width: 0.5)
+                  border: Border.all(
+                      color: const Color.fromARGB(255, 180, 178, 178),
+                      width: 0.5)),
+              child: Padding(
+                padding: EdgeInsets.all(20),
+                child: Row(
+                  children: [
+                    Expanded(child: Text("FAQ")),
+                    SizedBox(
+                      width: 20,
+                      child: Icon(Icons.message),
+                    )
+                  ],
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Row(
-                    children: [
-                      Expanded(child: Text("Logout")),
-                    ],
-                  ),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              height: 60,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                      color: const Color.fromARGB(255, 180, 178, 178),
+                      width: 0.5)),
+              child: Padding(
+                padding: EdgeInsets.all(20),
+                child: Row(
+                  children: [
+                    Expanded(child: Text("Logout")),
+                  ],
                 ),
-              )
-            
+              ),
+            )
           ],
         ),
-        
       ),
     );
   }
