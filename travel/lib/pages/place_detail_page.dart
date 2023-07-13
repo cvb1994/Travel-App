@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:travel/enum/appBarFuncEnum.dart';
 import 'package:travel/model/category_model.dart';
 import 'package:travel/model/place_model.dart';
+import 'package:travel/provider/auth_provider.dart';
 import 'package:travel/provider/place_provider.dart';
 import 'package:travel/widget/SubMenuWidget.dart';
 import 'package:travel/widget/categoryWidget.dart';
@@ -45,7 +46,7 @@ class _PlaceDetailPageState extends State<PlaceDetailPage> {
     double paddingSizeWidth = MediaQuery.of(context).size.width * 0.05;
 
     return Scaffold(
-      appBar: CustomAppBar.withTitleFunc(funcType: AppBarFuncENum.FAV, title: widget.dto.name,),
+      appBar: CustomAppBar.withTitleFunc(funcType: AppBarFuncENum.FAV, title: widget.dto.name, placeId: widget.dto.id!,),
       bottomNavigationBar: SizedBox(
         height: 70,
         child: Row(
@@ -120,12 +121,13 @@ class _PlaceDetailPageState extends State<PlaceDetailPage> {
                 ),
               ),
               const SubRowMenu(name: "Gallery Photo", buttonName: "",),
-              SizedBox(
+              SizedBox( 
                 height: 100,
                 child: FutureBuilder(
                   future: futureImage,
                   builder: ((context, snapshot){
                     List<String> urls = snapshot.data!;
+                    if(urls.isEmpty) return Container();
                     return Row(
                       children: [
                         Expanded(

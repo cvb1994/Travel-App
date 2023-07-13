@@ -106,15 +106,15 @@ class _LoginPageState extends State<LoginPage> {
                         return null;
                       },
                     ),
-                    GridTileBar(
+                    const GridTileBar(
                       leading: Align(
                         alignment: AlignmentDirectional.centerStart,
                         child: Row(
                           children: [CustomCheckBox(), Text("Remember Me")],
                         ),
                       ),
-                      title: const SizedBox(),
-                      trailing: const Align(
+                      title:  SizedBox(),
+                      trailing: Align(
                         alignment: AlignmentDirectional.centerEnd,
                         child: InkWell(
                           child: Text("Forgot Password"),
@@ -136,10 +136,10 @@ class _LoginPageState extends State<LoginPage> {
                       height: 15,
                     ),
                     CustomButton(
-                        //func: login, title: "Sign In", color: Colors.amber
-                        func: (){
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Dashboard()));
-                        }, title: "Sign In", color: Colors.amber
+                        func: login, title: "Sign In", color: Colors.amber
+                        // func: (){
+                        //   Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Dashboard()));
+                        // }, title: "Sign In", color: Colors.amber
                       ),
                   ],
                 ),

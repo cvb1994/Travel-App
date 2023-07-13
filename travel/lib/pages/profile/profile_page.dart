@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:travel/enum/appBarFuncEnum.dart';
 import 'package:travel/model/user_model.dart';
 import 'package:travel/pages/profile/edit_profile_page.dart';
 import 'package:travel/provider/auth_provider.dart';
-import 'package:travel/widget/custom_appbar.dart';
 import 'package:travel/widget/custom_navigation.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -57,29 +55,36 @@ class _ProfilePageState extends State<ProfilePage> {
                 future: futureUserModel,
                 builder: ((context, snapshot) {
                   UserModel user = snapshot.data!;
-                  return Column(
+                  return Row(
                     children: [
                       SizedBox(
+                        width: 60,
                         height: 60,
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 60,
-                              child: Image.network(user.image!),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                    "Hello ${user.firstName!} ${user.lastName!}"),
-                              ],
-                            )
-                          ],
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: Image.network(user.image!, fit: BoxFit.cover,),
                         ),
                       ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Hello, ${user.firstName!} ${user.lastName!}",
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold
+                            ),
+                          ),
+                          Text(user.address!,
+                            style: const  TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold
+                            ),
+                          )
+                        ],
+                      )
                     ],
                   );
                 })),
@@ -98,7 +103,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     border: Border.all(
                         color: const Color.fromARGB(255, 180, 178, 178),
                         width: 0.5)),
-                child: Padding(
+                child: const Padding(
                   padding: EdgeInsets.all(20),
                   child: Row(
                     children: [
@@ -122,7 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   border: Border.all(
                       color: const Color.fromARGB(255, 180, 178, 178),
                       width: 0.5)),
-              child: Padding(
+              child: const Padding(
                 padding: EdgeInsets.all(20),
                 child: Row(
                   children: [
@@ -143,9 +148,9 @@ class _ProfilePageState extends State<ProfilePage> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                      color: const Color.fromARGB(255, 180, 178, 178),
+                      color: Color.fromARGB(255, 180, 178, 178),
                       width: 0.5)),
-              child: Padding(
+              child: const  Padding(
                 padding: EdgeInsets.all(20),
                 child: Row(
                   children: [

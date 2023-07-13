@@ -82,6 +82,57 @@ class AuthProvider extends ChangeNotifier {
     return resp;
   }
 
+  Future<ResponseModel> updateUser(String firstName, String lastName, String phone, String adreess) async {
+    ResponseModel resp;
+    try {
+      final sharePref = await SharedPreferences.getInstance();
+      String userId = sharePref.getString("userId") ?? "";
+
+      DatabaseReference refUserInterest = database.ref("users/$userId");
+      await refUserInterest.update({"firstName": firstName, "lastName": lastName, "phone": phone, "address": adreess});
+
+      resp = ResponseModel(responseCode: ResponseCodeEnum.SUCCESS);
+    } on FirebaseAuthException catch (e) {
+      resp = ResponseModel(
+          responseCode: ResponseCodeEnum.FAIL, message: e.message);
+    }
+    return resp;
+  }
+
+  void addUserFavorite(String placeId) async {
+    try {
+      final sharePref = await SharedPreferences.getInstance();
+      String userId = sharePref.getString("userId") ?? "";
+
+      DatabaseReference refUserFav = database.ref("users/$userId/favPlace");
+      DatabaseReference favRef = refUserFav.push();
+
+      favRef.set(placeId);
+
+    } on FirebaseAuthException {
+    }
+  }
+
+  void removeUserFavorite(String placeId) async {
+    try {
+      final sharePref = await SharedPreferences.getInstance();
+      String userId = sharePref.getString("userId") ?? "";
+
+      DatabaseReference refUserFav = database.ref("users/$userId/favPlace");
+      DataSnapshot snapshot = await refUserFav.get();
+      
+      final map = snapshot.value as Map<dynamic, dynamic>;
+      map.forEach((key, value) {
+        if(value == placeId){
+          DatabaseReference refUserFav = database.ref("users/$userId/favPlace/$key");
+          refUserFav.remove();
+        }
+      });
+
+    } on FirebaseAuthException {
+    }
+  }
+
   // UserModel getUser() {
   //   try {
   //     final LocalStorage storage = new LocalStorage('userJson');
@@ -99,7 +150,6 @@ class AuthProvider extends ChangeNotifier {
     try {
       final sharePref = await SharedPreferences.getInstance();
       String userId = sharePref.getString("userId") ?? "";
-      userId = "Ld8KGOQbOLgethfogvB5bCDblDp2";
 
       DatabaseReference refUser = database.ref("users/$userId");
       DataSnapshot snapshot = await refUser.get();
@@ -121,7 +171,23 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<String> uploadImage(File file) {
-    final storageRef = FirebaseStorage.instance.ref();
+  void uploadImage(File file, String fileName) {
+    final storageRef = FirebaseStorage.instance.ref("/images/$fileName");
+
+    try {
+      UploadTask result = storageRef.putFile(file);
+      result.whenComplete(() async {
+        String url =  (await storageRef.getDownloadURL()).toString();
+
+        final sharePref = await SharedPreferences.getInstance();
+        String userId = sharePref.getString("userId") ?? "";
+
+        DatabaseReference refUserInterest = database.ref("users/$userId");
+        await refUserInterest.update({"image": url});
+      });
+      
+    } on FirebaseException {
+      // ...
+    }
   }
 }

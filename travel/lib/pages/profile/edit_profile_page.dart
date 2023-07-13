@@ -5,10 +5,10 @@ import 'package:provider/provider.dart';
 import 'package:travel/enum/appBarFuncEnum.dart';
 import 'package:travel/model/user_model.dart';
 import 'package:travel/provider/auth_provider.dart';
+import 'package:travel/util/custom_notify.dart';
 import 'package:travel/widget/custom_appbar.dart';
 import 'package:travel/widget/custom_button.dart';
 import 'package:travel/widget/custom_form_field.dart';
-import 'package:travel/widget/custom_navigation.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileEditPage extends StatefulWidget {
@@ -25,16 +25,30 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   final lastNameController = TextEditingController();
   final addressController = TextEditingController();
   final phoneController = TextEditingController();
+
   final picker = ImagePicker();
   String urlImage = "";
   File? galleryFile;
+  bool imageLoad = true;
 
   @override
   void initState() {
     // TODO: implement initState
-    futureUserModel = context.read<AuthProvider>().getUser();
-    firstNameController.text = "Bach";
+    //futureUserModel = context.read<AuthProvider>().getUser();
+    getUser();
     super.initState();
+  }
+
+  void getUser() async{
+    UserModel user = await context.read<AuthProvider>().getUser();
+    firstNameController.text = user.firstName!;
+    lastNameController.text = user.lastName!;
+    addressController.text = user.address!;
+    phoneController.text = user.phone!;
+    urlImage = user.image!;
+    setState(() {
+      imageLoad = false;
+    });
   }
 
   void loadImage() async {
@@ -81,11 +95,14 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   ) async {
     final pickedFile = await picker.pickImage(source: img);
     XFile? xfilePick = pickedFile;
+    imageLoad = true;
     setState(
       () {
         if (xfilePick != null) {
           galleryFile = File(pickedFile!.path);
           urlImage = pickedFile.path;
+          context.read<AuthProvider>().uploadImage(galleryFile!, xfilePick.name);
+
         } else {
           ScaffoldMessenger.of(context).showSnackBar(// is this context <<<
               const SnackBar(content: Text('Nothing is selected')));
@@ -96,7 +113,18 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
   @override
   Widget build(BuildContext context) {
+    CustomNotify notify = CustomNotify(context);
     double paddingSizeWidth = MediaQuery.of(context).size.width * 0.05;
+
+    void saveUser(){
+      String firstName = firstNameController.text;
+      String lastName = lastNameController.text;
+      String phone = phoneController.text;
+      String address = addressController.text;
+      context.read<AuthProvider>().updateUser(firstName, lastName, phone, address);
+      FocusManager.instance.primaryFocus!.unfocus();
+      notify.showCustomDialog("Update Successful");
+    }
 
     return Scaffold(
       appBar: CustomAppBar(funcType: AppBarFuncENum.OTHER),
@@ -106,14 +134,14 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
             padding: EdgeInsets.all(20),
             child: CustomButton(
               color: Colors.amber,
-              func: () {},
+              func: saveUser,
               title: 'Update',
             )),
       ),
       body: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
+        //physics: const  NeverScrollableScrollPhysics(),
         child: Padding(
-            padding: EdgeInsets.all(paddingSizeWidth),
+            padding: EdgeInsets.symmetric(horizontal: paddingSizeWidth, vertical: 5),
             child: Column(
               children: [
                 const Text(
@@ -134,13 +162,12 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                       width: 120,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
-                        child: urlImage.isNotEmpty
+                        child: !imageLoad ? Image.network(urlImage) : urlImage.isNotEmpty
                             ? Image.file(
                                 File(urlImage),
                                 fit: BoxFit.cover,
                               )
-                            : Image.network(
-                                "https://img.freepik.com/free-icon/user_318-563642.jpg?w=360"),
+                            : Image.asset("assets/image/user_default.png"),
                       ),
                     ),
                     Positioned(
@@ -154,13 +181,21 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 5,
+                                    blurRadius: 7,
+                                    offset: Offset(0, 3), // changes position of shadow
+                                  ),
+                                ],
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
+                              child: const Padding(
+                                padding:  EdgeInsets.symmetric(
                                     vertical: 5, horizontal: 20),
                                 child: Center(
                                   child: Row(
-                                    children: const [
+                                    children:  [
                                       Icon(
                                         Icons.camera_alt,
                                         size: 16,

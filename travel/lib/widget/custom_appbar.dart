@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:travel/enum/appBarFuncEnum.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:travel/provider/auth_provider.dart';
+import 'package:travel/widget/favorite_widget.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   String? title;
   String funcType; //phân loại appBar cho các chức năng khác nhau
   VoidCallback? onTap;
+  String? placeId;
 
   CustomAppBar({super.key, required this.funcType}) {
     title = null;
@@ -17,7 +21,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   CustomAppBar.withFunc({super.key, required this.funcType, this.onTap});
 
   CustomAppBar.withTitleFunc(
-      {super.key, required this.funcType, this.onTap, required this.title});
+      {super.key, required this.funcType, this.onTap, required this.title, this.placeId});
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
@@ -28,6 +32,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _CustomAppBarState extends State<CustomAppBar> {
   String? username;
+  bool isActive = false;
 
   @override
   void initState() {
@@ -42,6 +47,14 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   @override
   Widget build(BuildContext context) {
+    void addFav(){
+      context.read<AuthProvider>().addUserFavorite(widget.placeId!);
+    }
+
+    void removeFav(){
+      context.read<AuthProvider>().removeUserFavorite(widget.placeId!);
+    }
+    
     double paddingSizeWidth = MediaQuery.of(context).size.width * 0.05;
     double leftIconWidth = (MediaQuery.of(context).size.width * 0.9) * 0.1;
     double titleWidth = (MediaQuery.of(context).size.width * 0.9) * 0.8;
@@ -94,7 +107,19 @@ class _CustomAppBarState extends State<CustomAppBar> {
             ),
             SizedBox(
               width: rightIconWidth,
-              child: Icon(Icons.favorite),
+              //child: Icon(Icons.favorite_border, color: Colors.red,),
+              child: GestureDetector(
+                onTap: () {
+                  if(isActive){
+                    removeFav();
+                  } else {
+                    addFav();
+                  }
+                  setState(() {
+                    isActive = !isActive;
+                  });
+                },
+                child: FavoriteWidget(isActive: isActive,)),
             ),
           ],
         ));

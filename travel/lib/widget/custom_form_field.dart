@@ -62,12 +62,12 @@ class _CustomFormFieldState extends State<CustomFormField> {
             top: 3,
             child: Container(
               decoration:
-                  BoxDecoration(color: Color.fromARGB(250, 250, 250, 250)),
-              padding: EdgeInsets.symmetric(horizontal: 5),
+                  const BoxDecoration(color: Color.fromARGB(250, 250, 250, 250)),
+              padding: const EdgeInsets.symmetric(horizontal: 5),
               child: Text(
                 widget.fieldName,
                 textAlign: TextAlign.justify,
-                style: TextStyle(color: color != null ? color : Colors.black),
+                style: TextStyle(color: color ?? Colors.black),
               ),
             ))
       ],
