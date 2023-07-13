@@ -6,6 +6,7 @@ class PlaceModel {
   String? image;
   double? price;
   String? des;
+  bool? isFav;
 
   PlaceModel({
     this.id,

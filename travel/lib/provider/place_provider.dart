@@ -1,4 +1,6 @@
 import 'package:flutter/foundation.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel/model/place_model.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -6,11 +8,14 @@ class PlaceProvider extends ChangeNotifier{
   PlaceProvider();
 
   FirebaseDatabase database = FirebaseDatabase.instance;
-
-
+  
   Future<List<PlaceModel>> getPlaces() async{
     List<PlaceModel> listplace = [];
     try {
+      final sharePref = await SharedPreferences.getInstance();
+      String? favPlaceStr = sharePref.getString("favPlace");
+      List<String> favPlaces = favPlaceStr!.split(",");
+
       DatabaseReference refCategory = database.ref("place");
       DataSnapshot snapshot = await refCategory.get();
       
@@ -20,6 +25,12 @@ class PlaceProvider extends ChangeNotifier{
             var place = PlaceModel();
             place = PlaceModel.fromMap(value);
             place.id = key;
+            if(favPlaces.contains(key)){
+              place.isFav = true;
+            } else {
+              place.isFav = false;
+            }
+
             listplace.add(place);
           });
 
@@ -39,12 +50,21 @@ class PlaceProvider extends ChangeNotifier{
     try {
       DatabaseReference refCategory = database.ref("place/$id");
       DataSnapshot snapshot = await refCategory.get();
+
+      final sharePref = await SharedPreferences.getInstance();
+      String? favPlaceStr = sharePref.getString("favPlace");
+      List<String> favPlaces = favPlaceStr!.split(",");
       
       if (snapshot.exists) {
           final map = snapshot.value as Map<dynamic, dynamic>;
           var place = PlaceModel();
           place = PlaceModel.fromMap(map);
           place.id = id;
+          if(favPlaces.contains(id)){
+            place.isFav = true;
+          } else {
+            place.isFav = false;
+          }
 
           return place;
 
@@ -82,4 +102,27 @@ class PlaceProvider extends ChangeNotifier{
     }
   }
 
+  Future<List<String>> getFavoritedPlacesId() async{
+    List<String> listplace = [];
+    try {
+      final sharePref = await SharedPreferences.getInstance();
+      String userId = sharePref.getString("userId") ?? "";
+
+      DatabaseReference refUserFav = database.ref("users/$userId/favPlace");
+      DataSnapshot snapshot = await refUserFav.get();
+      
+      final map = snapshot.value as Map<dynamic, dynamic>;
+      map.forEach((key, value) {
+        listplace.add(value);
+      });
+
+      return listplace;
+      
+    } catch (err) {
+      print(err);
+      rethrow;
+    }
+    
+  }
 }
+

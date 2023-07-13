@@ -14,6 +14,7 @@ import 'package:travel/widget/custom_button.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class BookingPage extends StatefulWidget {
+  static const routerName = "/bookingPage";
   final PlaceModel place;
   const BookingPage({super.key, required this.place});
 

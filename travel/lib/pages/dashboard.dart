@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:travel/enum/appBarFuncEnum.dart';
 import 'package:travel/model/category_model.dart';
@@ -25,25 +26,41 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   final controller = TextEditingController();
-  final categoryProvider = CategoryProvider();
-  late Future<List<CategoryModel>> futureListCategory;
-  List<CategoryWidget> list = [];
-  
-  final placeProvider = PlaceProvider();
-  late Future<List<PlaceModel>> futureListPlace;
+  late List<CategoryModel> listCategory;
+  late List<PlaceModel> listPlace;
+
+  bool isLoading = true;
+  int countCompleted = 0;
 
   @override
   void initState() {
     // TODO: implement initState
-    futureListCategory = context.read<CategoryProvider>().getCategories();
-    futureListPlace = context.read<PlaceProvider>().getPlaces();
+    fetchData();
     super.initState();
+  }
+
+  void fetchData() async{
+    listCategory = await context.read<CategoryProvider>().getCategories().whenComplete(() {
+      countCompleted++;
+      setState(() {});
+    });
+    listPlace = await context.read<PlaceProvider>().getPlaces().whenComplete(() {
+      countCompleted++;
+      setState(() {});
+    });
+    
   }
 
   @override
   Widget build(BuildContext context) {
     double paddingSizeWidth = MediaQuery.of(context).size.width * 0.05;
 
+    if(countCompleted < 2){
+      EasyLoading.show(status: 'loading...');
+      return Container();
+    }
+
+    EasyLoading.dismiss();
     return Scaffold(
       appBar: CustomAppBar(funcType: AppBarFuncENum.DASHBOARD),
       bottomNavigationBar: const CustomNavigationBar(
@@ -58,7 +75,7 @@ class _DashboardState extends State<Dashboard> {
               child: Text(
                 "Where do you \nwant to explore today?",
                 style: TextStyle(
-                    fontSize: 27,
+                    fontSize: 26,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.5),
               ),
@@ -72,65 +89,74 @@ class _DashboardState extends State<Dashboard> {
             const SubRowMenu(name: "Choose Category", buttonName: "See All",),
             SizedBox(
               height: 70,
-              child: FutureBuilder(
-                future: futureListCategory,
-                builder: ((context, snapshot) {
-                  List<CategoryModel> categories = snapshot.data!;
-                  return ListView.separated(
-                    itemCount: categories.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, int index){
-                      CategoryModel model = categories[index];
-                      return CategoryWidget(name: model.name!, imagePath: model.image!,);
-                    },
-                    separatorBuilder: (context, index) => const SizedBox(
-                      width: 15,
-                    )
-                  );
-                }),
+              child: ListView.separated(
+                itemCount: listCategory.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (BuildContext context, int index){
+                  CategoryModel model = listCategory[index];
+                  return CategoryWidget(name: model.name!, imagePath: model.image!,);
+                },
+                separatorBuilder: (context, index) => const SizedBox(
+                  width: 15,
+                )
               )
             ),
             const SubRowMenu(name: "Favorite Place", buttonName: "Explore",),
             SizedBox(
               height: 250,
-              child: FutureBuilder(
-                future: futureListPlace,
-                builder: ((context, snapshot) {
-                  List<PlaceModel> places = snapshot.data!;
-                  return ListView.separated(
-                    itemCount: places.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, int index){
-                      return GestureDetector(
-                        onTap: (){
+              child: ListView.separated(
+                itemCount: listPlace.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (BuildContext context, int index){
+                  return GestureDetector(
+                    onTap: (){
 
-                          Navigator.of(context).pushNamed(PlaceDetailPage.routerName, arguments: places[index]);
-                        },
-                        child: PlaceWidget(
-                          imagePath: places[index].image!, 
-                          name: places[index].name!, 
-                          location: places[index].location!, 
-                          rate: places[index].rate!, 
-                          width: 210,
-                        ),
-                      );
+                      Navigator.of(context).pushNamed(PlaceDetailPage.routerName, arguments: listPlace[index]);
                     },
-                    separatorBuilder: (context, index) => const SizedBox(
-                      width: 15,
-                    )
+                    child: PlaceWidget(
+                      imagePath: listPlace[index].image!, 
+                      name: listPlace[index].name!, 
+                      location: listPlace[index].location!, 
+                      rate: listPlace[index].rate!, 
+                      width: 210,
+                    ),
                   );
-                }),
+                },
+                separatorBuilder: (context, index) => const SizedBox(
+                  width: 15,
+                )
               )
             ),
             const SubRowMenu(name: "Popular Package", buttonName: "See All",),
-            SizedBox(
-              child: PackageBooking(imagePath: "f2", name: "sdv", describe: "this a paragraph for testing width of text display on screen a little longer than older", rate: 2, price: 149.99,)
+            Column(
+              children: gen(),
             ),
 
           ],
         ),
       ),
     );
+  }
+
+  List<Widget> gen(){
+    List<Widget> list = [];
+    listPlace.forEach((element) {
+      list.add(GestureDetector(
+          onTap: (){
+            Navigator.of(context).pushNamed(PlaceDetailPage.routerName, arguments: element);
+          },
+          child: PackageBooking(
+            imagePath: element.image!, 
+            name: element.name!, 
+            describe: element.des!, 
+            rate: element.rate!, 
+            price: element.price!,
+            isFav: element.isFav!,)
+        ));
+        list.add(SizedBox(height: 20,));
+    });
+
+    return list;
   }
 }
 

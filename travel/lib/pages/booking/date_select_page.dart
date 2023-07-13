@@ -47,6 +47,7 @@ class _DateSelectPageState extends State<DateSelectPage>{
                 SizedBox(
                   height: 450,
                   child: SfDateRangePicker(
+                    minDate: DateTime.now(),
                     controller: widget.controller,
                     selectionMode: DateRangePickerSelectionMode.single,
                     initialSelectedRange: PickerDateRange(

@@ -64,12 +64,8 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(children: [
               SizedBox(
                 height: logoBox,
-                child: const Center(
-                  child: Text("Travel",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 35)),
+                child:  Center(
+                  child: Image.asset("assets/image/logo.png", scale: 0.7,)
                 ),
               ),
               Expanded(

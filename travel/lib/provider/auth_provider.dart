@@ -7,7 +7,6 @@ import 'package:travel/enum/reponse_enum.dart';
 import 'package:travel/model/response_model.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:travel/model/user_model.dart';
-import 'package:localstorage/localstorage.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -47,7 +46,6 @@ class AuthProvider extends ChangeNotifier {
           email: email, password: pass);
 
       await prefs.setString("userId", auth.user!.uid);
-      await prefs.setString("userName", auth.user!.uid);
 
       resp = ResponseModel(responseCode: ResponseCodeEnum.SUCCESS);
 
@@ -55,8 +53,20 @@ class AuthProvider extends ChangeNotifier {
       DataSnapshot snapshot = await refUser.get();
       if (snapshot.exists) {
         final map = snapshot.value as Map<dynamic, dynamic>;
-        final LocalStorage storage = new LocalStorage('userJson');
-        storage.setItem("user", map);
+        final favPlace = map["favPlace"] as Map<dynamic, dynamic>;
+        String favPlaceStr = "";
+        favPlace.forEach((key, value) {
+          favPlaceStr = favPlaceStr + ","+value;
+        });
+
+        await prefs.setString("favPlace", favPlaceStr);
+
+        final firstName = map["firstName"] as String;
+        final lastName = map["lastName"] as String;
+        await prefs.setString("userName", "$firstName $lastName");
+
+        final image = map["image"] as String;
+        await prefs.setString("userImage", image);
       }
     } on FirebaseAuthException catch (e) {
       resp = ResponseModel(
@@ -109,6 +119,10 @@ class AuthProvider extends ChangeNotifier {
 
       favRef.set(placeId);
 
+      String? favPlaceStr = sharePref.getString("favPlace");
+      favPlaceStr = "${favPlaceStr!},$placeId";
+      await sharePref.setString("favPlace", favPlaceStr);
+      
     } on FirebaseAuthException {
     }
   }
@@ -128,6 +142,15 @@ class AuthProvider extends ChangeNotifier {
           refUserFav.remove();
         }
       });
+
+      String? favPlaceStr = sharePref.getString("favPlace");
+      List<String> favPlaces = favPlaceStr!.split(",");
+      favPlaces.remove(placeId);
+      String favString = "";
+      favPlaces.forEach((element) {
+        favString = favString + element;
+      });
+      await sharePref.setString("favPlace", favString);
 
     } on FirebaseAuthException {
     }

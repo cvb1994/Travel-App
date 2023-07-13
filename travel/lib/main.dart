@@ -1,9 +1,9 @@
-import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travel/firebase_options.dart';
 import 'package:travel/model/place_model.dart';
+import 'package:travel/pages/booking/booking_page.dart';
 import 'package:travel/pages/place_detail_page.dart';
 import 'package:travel/pages/searching_page.dart';
 import 'package:travel/pages/welcome_page.dart';
@@ -18,7 +18,6 @@ import 'package:travel/provider/place_provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  final dio = Dio();
 
   runApp(MultiProvider(
     providers: [
@@ -42,6 +41,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        fontFamily: 'Inter'
+      ),
       debugShowCheckedModeBanner: false,
       home: WelcomeScreen(),
       builder: EasyLoading.init(),
@@ -73,6 +75,15 @@ class MyApp extends StatelessWidget {
           return MaterialPageRoute(
             builder: (context) {
               return PlaceDetailPage(dto: dto);
+            },
+          );
+        }
+        if (settings.name == BookingPage.routerName) {
+          final dto = settings.arguments as PlaceModel;
+
+          return MaterialPageRoute(
+            builder: (context) {
+              return BookingPage(place: dto);
             },
           );
         }

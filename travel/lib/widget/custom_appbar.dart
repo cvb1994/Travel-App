@@ -10,6 +10,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   String funcType; //phân loại appBar cho các chức năng khác nhau
   VoidCallback? onTap;
   String? placeId;
+  bool? isFav;
 
   CustomAppBar({super.key, required this.funcType}) {
     title = null;
@@ -21,7 +22,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   CustomAppBar.withFunc({super.key, required this.funcType, this.onTap});
 
   CustomAppBar.withTitleFunc(
-      {super.key, required this.funcType, this.onTap, required this.title, this.placeId});
+      {super.key, required this.funcType, this.onTap, required this.title, this.placeId, this.isFav});
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
@@ -32,8 +33,8 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _CustomAppBarState extends State<CustomAppBar> {
   String? username;
-  bool isActive = false;
-
+  String? image;
+  
   @override
   void initState() {
     super.initState();
@@ -43,6 +44,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
   void getUserData() async {
     final prefs = await SharedPreferences.getInstance();
     username = prefs.getString("userName") ?? '';
+    image = prefs.getString("userImage") ?? '';
+    setState(() {});
   }
 
   @override
@@ -66,7 +69,15 @@ class _CustomAppBarState extends State<CustomAppBar> {
               left: paddingSizeWidth, right: paddingSizeWidth, top: 50),
           child: Row(
             children: [
+              image != null  && image != ""? 
               SizedBox(
+                width: leftIconWidth,
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: Image.network(image!, fit: BoxFit.cover,),
+                  ),
+              )
+              : SizedBox(
                 width: leftIconWidth,
                 child: Image.asset(
                   "assets/icons/profile.png",
@@ -75,7 +86,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
               ),
               SizedBox(
                 width: titleWidth,
-                child: Text(username ?? "", style: TextStyle(color: Colors.black),),
+                child: Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: Text(username ?? "", style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w600),),
+                ),
               ),
               SizedBox(
                 width: rightIconWidth,
@@ -103,23 +117,24 @@ class _CustomAppBarState extends State<CustomAppBar> {
             ),
             SizedBox(
               width: titleWidth,
-              child: Center(child: Text(widget.title!, style: TextStyle(color: Colors.black))),
+              child: Center(child: Text(widget.title!, style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold))),
             ),
             SizedBox(
               width: rightIconWidth,
               //child: Icon(Icons.favorite_border, color: Colors.red,),
               child: GestureDetector(
                 onTap: () {
-                  if(isActive){
+                  print(widget.isFav);
+                  if(widget.isFav!){
                     removeFav();
                   } else {
                     addFav();
                   }
                   setState(() {
-                    isActive = !isActive;
+                    widget.isFav = !widget.isFav!;
                   });
                 },
-                child: FavoriteWidget(isActive: isActive,)),
+                child: FavoriteWidget(isActive: widget.isFav!,)),
             ),
           ],
         ));

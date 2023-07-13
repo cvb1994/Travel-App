@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:travel/model/user_model.dart';
 import 'package:travel/pages/profile/edit_profile_page.dart';
@@ -14,19 +15,34 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late Future<UserModel> futureUserModel;
+  late UserModel userModel;
+  bool isLoading = true;
 
   @override
   void initState() {
     // TODO: implement initState
-    futureUserModel = context.read<AuthProvider>().getUser();
+    fetchData();
     super.initState();
+  }
+
+  void fetchData() async{
+    userModel = await context.read<AuthProvider>().getUser().whenComplete(() {
+      setState(() {
+        isLoading = false;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     double paddingSizeWidth = MediaQuery.of(context).size.width * 0.05;
 
+    if(isLoading){
+      EasyLoading.show(status: 'loading...');
+      return Container();
+    }
+
+    EasyLoading.dismiss();
     return Scaffold(
       bottomNavigationBar: const CustomNavigationBar(
         currentRouteName: ProfilePage.routerName,
@@ -51,43 +67,38 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(
               height: 20,
             ),
-            FutureBuilder(
-                future: futureUserModel,
-                builder: ((context, snapshot) {
-                  UserModel user = snapshot.data!;
-                  return Row(
-                    children: [
-                      SizedBox(
-                        width: 60,
-                        height: 60,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: Image.network(user.image!, fit: BoxFit.cover,),
-                        ),
+            Row(
+              children: [
+                SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: Image.network(userModel.image!, fit: BoxFit.cover,),
+                  ),
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Hello, ${userModel.firstName!} ${userModel.lastName!}",
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold
                       ),
-                      const SizedBox(
-                        width: 20,
+                    ),
+                    Text(userModel.address!,
+                      style: const  TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Hello, ${user.firstName!} ${user.lastName!}",
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold
-                            ),
-                          ),
-                          Text(user.address!,
-                            style: const  TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  );
-                })),
+                    )
+                  ],
+                )
+              ],
+            ),
             const SizedBox(
               height: 20,
             ),

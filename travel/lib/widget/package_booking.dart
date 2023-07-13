@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel/widget/favorite_widget.dart';
 
 class PackageBooking extends StatelessWidget{
   final String imagePath;
@@ -6,8 +7,9 @@ class PackageBooking extends StatelessWidget{
   final String describe;
   final double rate;
   final double price;
+  final bool isFav;
 
-  const PackageBooking({super.key, required this.imagePath, required this.name, required this.describe, required this.rate, required this.price});
+  const PackageBooking({super.key, required this.imagePath, required this.name, required this.describe, required this.rate, required this.price, required this.isFav});
   
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,7 @@ class PackageBooking extends StatelessWidget{
       height: 180,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Color.fromARGB(255, 121, 118, 118), width: 0.3)
+        border: Border.all(color: Color.fromARGB(200, 185, 183, 183), width: 0.5)
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -27,7 +29,7 @@ class PackageBooking extends StatelessWidget{
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                image: DecorationImage(image: AssetImage("assets/image/place1.jpg"),fit: BoxFit.cover)
+                image: DecorationImage(image: NetworkImage(imagePath),fit: BoxFit.cover)
               ),
               width: 100,
               height: double.maxFinite,
@@ -78,7 +80,7 @@ class PackageBooking extends StatelessWidget{
                   Positioned(
                     right: 0,
                     child: GestureDetector(
-                      child: Icon(Icons.favorite_outline),
+                      child: FavoriteWidget(isActive: isFav,),
                     ),
                   )
                 ],
