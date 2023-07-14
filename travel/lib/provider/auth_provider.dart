@@ -56,7 +56,7 @@ class AuthProvider extends ChangeNotifier {
         final favPlace = map["favPlace"] as Map<dynamic, dynamic>;
         String favPlaceStr = "";
         favPlace.forEach((key, value) {
-          favPlaceStr = favPlaceStr + ","+value;
+          favPlaceStr = favPlaceStr + "," + value;
         });
 
         await prefs.setString("favPlace", favPlaceStr);
@@ -92,14 +92,20 @@ class AuthProvider extends ChangeNotifier {
     return resp;
   }
 
-  Future<ResponseModel> updateUser(String firstName, String lastName, String phone, String adreess) async {
+  Future<ResponseModel> updateUser(
+      String firstName, String lastName, String phone, String adreess) async {
     ResponseModel resp;
     try {
       final sharePref = await SharedPreferences.getInstance();
       String userId = sharePref.getString("userId") ?? "";
 
       DatabaseReference refUserInterest = database.ref("users/$userId");
-      await refUserInterest.update({"firstName": firstName, "lastName": lastName, "phone": phone, "address": adreess});
+      await refUserInterest.update({
+        "firstName": firstName,
+        "lastName": lastName,
+        "phone": phone,
+        "address": adreess
+      });
 
       resp = ResponseModel(responseCode: ResponseCodeEnum.SUCCESS);
     } on FirebaseAuthException catch (e) {
@@ -122,9 +128,7 @@ class AuthProvider extends ChangeNotifier {
       String? favPlaceStr = sharePref.getString("favPlace");
       favPlaceStr = "${favPlaceStr!},$placeId";
       await sharePref.setString("favPlace", favPlaceStr);
-      
-    } on FirebaseAuthException {
-    }
+    } on FirebaseAuthException {}
   }
 
   void removeUserFavorite(String placeId) async {
@@ -134,11 +138,12 @@ class AuthProvider extends ChangeNotifier {
 
       DatabaseReference refUserFav = database.ref("users/$userId/favPlace");
       DataSnapshot snapshot = await refUserFav.get();
-      
+
       final map = snapshot.value as Map<dynamic, dynamic>;
       map.forEach((key, value) {
-        if(value == placeId){
-          DatabaseReference refUserFav = database.ref("users/$userId/favPlace/$key");
+        if (value == placeId) {
+          DatabaseReference refUserFav =
+              database.ref("users/$userId/favPlace/$key");
           refUserFav.remove();
         }
       });
@@ -148,12 +153,10 @@ class AuthProvider extends ChangeNotifier {
       favPlaces.remove(placeId);
       String favString = "";
       favPlaces.forEach((element) {
-        favString = favString + element;
+        favString = "$favString,$element";
       });
       await sharePref.setString("favPlace", favString);
-
-    } on FirebaseAuthException {
-    }
+    } on FirebaseAuthException {}
   }
 
   // UserModel getUser() {
@@ -200,7 +203,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       UploadTask result = storageRef.putFile(file);
       result.whenComplete(() async {
-        String url =  (await storageRef.getDownloadURL()).toString();
+        String url = (await storageRef.getDownloadURL()).toString();
 
         final sharePref = await SharedPreferences.getInstance();
         String userId = sharePref.getString("userId") ?? "";
@@ -208,7 +211,6 @@ class AuthProvider extends ChangeNotifier {
         DatabaseReference refUserInterest = database.ref("users/$userId");
         await refUserInterest.update({"image": url});
       });
-      
     } on FirebaseException {
       // ...
     }

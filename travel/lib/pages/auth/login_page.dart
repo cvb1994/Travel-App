@@ -64,9 +64,11 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(children: [
               SizedBox(
                 height: logoBox,
-                child:  Center(
-                  child: Image.asset("assets/image/logo.png", scale: 0.7,)
-                ),
+                child: Center(
+                    child: Image.asset(
+                  "assets/image/logo.png",
+                  scale: 0.7,
+                )),
               ),
               Expanded(
                 child: Column(
@@ -102,15 +104,15 @@ class _LoginPageState extends State<LoginPage> {
                         return null;
                       },
                     ),
-                    const GridTileBar(
+                    GridTileBar(
                       leading: Align(
                         alignment: AlignmentDirectional.centerStart,
                         child: Row(
                           children: [CustomCheckBox(), Text("Remember Me")],
                         ),
                       ),
-                      title:  SizedBox(),
-                      trailing: Align(
+                      title: const SizedBox(),
+                      trailing: const Align(
                         alignment: AlignmentDirectional.centerEnd,
                         child: InkWell(
                           child: Text("Forgot Password"),
@@ -136,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
                         // func: (){
                         //   Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Dashboard()));
                         // }, title: "Sign In", color: Colors.amber
-                      ),
+                        ),
                   ],
                 ),
               ),

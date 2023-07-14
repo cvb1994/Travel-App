@@ -39,23 +39,32 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
   }
 
-  void fetchData() async{
-    listCategory = await context.read<CategoryProvider>().getCategories().whenComplete(() {
+  void fetchData() async {
+    listCategory =
+        await context.read<CategoryProvider>().getCategories().whenComplete(() {
       countCompleted++;
       setState(() {});
     });
-    listPlace = await context.read<PlaceProvider>().getPlaces().whenComplete(() {
+    listPlace =
+        await context.read<PlaceProvider>().getPlaces().whenComplete(() {
       countCompleted++;
       setState(() {});
     });
-    
+  }
+
+  void _refreshData() {
+    print("da refresh");
+    setState(() {
+      countCompleted = 0;
+    });
+    fetchData();
   }
 
   @override
   Widget build(BuildContext context) {
     double paddingSizeWidth = MediaQuery.of(context).size.width * 0.05;
 
-    if(countCompleted < 2){
+    if (countCompleted < 2) {
       EasyLoading.show(status: 'loading...');
       return Container();
     }
@@ -67,7 +76,8 @@ class _DashboardState extends State<Dashboard> {
         currentRouteName: Dashboard.routerName,
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: paddingSizeWidth, vertical: 15),
+        padding:
+            EdgeInsets.symmetric(horizontal: paddingSizeWidth, vertical: 15),
         child: ListView(
           children: [
             const Padding(
@@ -84,79 +94,105 @@ class _DashboardState extends State<Dashboard> {
               onTap: () {
                 Navigator.of(context).pushNamed(SearchingPage.routerName);
               },
-              child: InputSearch(controller: controller, isEnable: false,),
+              child: InputSearch(
+                controller: controller,
+                isEnable: false,
+              ),
             ),
-            const SubRowMenu(name: "Choose Category", buttonName: "See All",),
-            SizedBox(
-              height: 70,
-              child: ListView.separated(
-                itemCount: listCategory.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index){
-                  CategoryModel model = listCategory[index];
-                  return CategoryWidget(name: model.name!, imagePath: model.image!,);
-                },
-                separatorBuilder: (context, index) => const SizedBox(
-                  width: 15,
-                )
-              )
+            const SubRowMenu(
+              name: "Choose Category",
+              buttonName: "See All",
             ),
-            const SubRowMenu(name: "Favorite Place", buttonName: "Explore",),
             SizedBox(
-              height: 250,
-              child: ListView.separated(
-                itemCount: listPlace.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index){
-                  return GestureDetector(
-                    onTap: (){
-
-                      Navigator.of(context).pushNamed(PlaceDetailPage.routerName, arguments: listPlace[index]);
+                height: 70,
+                child: ListView.separated(
+                    itemCount: listCategory.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext context, int index) {
+                      CategoryModel model = listCategory[index];
+                      return CategoryWidget(
+                        name: model.name!,
+                        imagePath: model.image!,
+                      );
                     },
-                    child: PlaceWidget(
-                      imagePath: listPlace[index].image!, 
-                      name: listPlace[index].name!, 
-                      location: listPlace[index].location!, 
-                      rate: listPlace[index].rate!, 
-                      width: 210,
-                    ),
-                  );
-                },
-                separatorBuilder: (context, index) => const SizedBox(
-                  width: 15,
-                )
-              )
+                    separatorBuilder: (context, index) => const SizedBox(
+                          width: 15,
+                        ))),
+            const SubRowMenu(
+              name: "Favorite Place",
+              buttonName: "Explore",
             ),
-            const SubRowMenu(name: "Popular Package", buttonName: "See All",),
+            SizedBox(
+                height: 250,
+                child: ListView.separated(
+                    itemCount: listPlace.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext context, int index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushNamed(PlaceDetailPage.routerName,
+                                  arguments: listPlace[index])
+                              .then((_) {
+                            setState(() {
+                              countCompleted = 0;
+                            });
+                            _refreshData();
+                          });
+                        },
+                        child: PlaceWidget(
+                          imagePath: listPlace[index].image!,
+                          name: listPlace[index].name!,
+                          location: listPlace[index].location!,
+                          rate: listPlace[index].rate!,
+                          width: 210,
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, index) => const SizedBox(
+                          width: 15,
+                        ))),
+            const SubRowMenu(
+              name: "Popular Package",
+              buttonName: "See All",
+            ),
             Column(
               children: gen(),
             ),
-
           ],
         ),
       ),
     );
   }
 
-  List<Widget> gen(){
+  List<Widget> gen() {
     List<Widget> list = [];
     listPlace.forEach((element) {
       list.add(GestureDetector(
-          onTap: (){
-            Navigator.of(context).pushNamed(PlaceDetailPage.routerName, arguments: element);
+          onTap: () {
+            Navigator.of(context)
+                .pushNamed(PlaceDetailPage.routerName, arguments: element)
+                .then((_) {
+              setState(() {
+                countCompleted = 0;
+              });
+              _refreshData();
+            });
+            ;
           },
           child: PackageBooking(
-            imagePath: element.image!, 
-            name: element.name!, 
-            describe: element.des!, 
-            rate: element.rate!, 
+            imagePath: element.image!,
+            name: element.name!,
+            describe: element.des!,
+            rate: element.rate!,
             price: element.price!,
-            isFav: element.isFav!,)
-        ));
-        list.add(SizedBox(height: 20,));
+            isFav: element.isFav!,
+          )));
+      list.add(const SizedBox(
+        height: 20,
+      ));
     });
 
     return list;
   }
 }
-

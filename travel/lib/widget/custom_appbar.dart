@@ -22,7 +22,12 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   CustomAppBar.withFunc({super.key, required this.funcType, this.onTap});
 
   CustomAppBar.withTitleFunc(
-      {super.key, required this.funcType, this.onTap, required this.title, this.placeId, this.isFav});
+      {super.key,
+      required this.funcType,
+      this.onTap,
+      required this.title,
+      this.placeId,
+      this.isFav});
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
@@ -34,7 +39,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _CustomAppBarState extends State<CustomAppBar> {
   String? username;
   String? image;
-  
+
   @override
   void initState() {
     super.initState();
@@ -50,14 +55,14 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    void addFav(){
+    void addFav() {
       context.read<AuthProvider>().addUserFavorite(widget.placeId!);
     }
 
-    void removeFav(){
+    void removeFav() {
       context.read<AuthProvider>().removeUserFavorite(widget.placeId!);
     }
-    
+
     double paddingSizeWidth = MediaQuery.of(context).size.width * 0.05;
     double leftIconWidth = (MediaQuery.of(context).size.width * 0.9) * 0.1;
     double titleWidth = (MediaQuery.of(context).size.width * 0.9) * 0.8;
@@ -69,26 +74,35 @@ class _CustomAppBarState extends State<CustomAppBar> {
               left: paddingSizeWidth, right: paddingSizeWidth, top: 50),
           child: Row(
             children: [
-              image != null  && image != ""? 
-              SizedBox(
-                width: leftIconWidth,
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: Image.network(image!, fit: BoxFit.cover,),
-                  ),
-              )
-              : SizedBox(
-                width: leftIconWidth,
-                child: Image.asset(
-                  "assets/icons/profile.png",
-                  alignment: Alignment.centerLeft,
-                ),
-              ),
+              image != null && image != ""
+                  ? SizedBox(
+                      width: leftIconWidth,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: Image.network(
+                          image!,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    )
+                  : SizedBox(
+                      width: leftIconWidth,
+                      child: Image.asset(
+                        "assets/icons/profile.png",
+                        alignment: Alignment.centerLeft,
+                      ),
+                    ),
               SizedBox(
                 width: titleWidth,
                 child: Padding(
                   padding: EdgeInsets.only(left: 10),
-                  child: Text(username ?? "", style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w600),),
+                  child: Text(
+                    username ?? "",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600),
+                  ),
                 ),
               ),
               SizedBox(
@@ -97,48 +111,52 @@ class _CustomAppBarState extends State<CustomAppBar> {
               ),
             ],
           ));
-
-    } else if((widget.funcType == AppBarFuncENum.FAV) ){
+    } else if ((widget.funcType == AppBarFuncENum.FAV)) {
       return Padding(
-        padding: EdgeInsets.only(
-            left: paddingSizeWidth, right: paddingSizeWidth, top: 50),
-        child: Row(
-          children: [
-            SizedBox(
-              width: leftIconWidth,
-              child: IconButton(
-                color: Colors.black,
-                onPressed: widget.onTap ??
-                    () {
-                      Navigator.of(context).pop();
+          padding: EdgeInsets.only(
+              left: paddingSizeWidth, right: paddingSizeWidth, top: 50),
+          child: Row(
+            children: [
+              SizedBox(
+                width: leftIconWidth,
+                child: IconButton(
+                    color: Colors.black,
+                    onPressed: widget.onTap ??
+                        () {
+                          Navigator.of(context).pop(context);
+                        },
+                    icon: const Icon(Icons.arrow_back_outlined)),
+              ),
+              SizedBox(
+                width: titleWidth,
+                child: Center(
+                    child: Text(widget.title!,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold))),
+              ),
+              SizedBox(
+                width: rightIconWidth,
+                //child: Icon(Icons.favorite_border, color: Colors.red,),
+                child: GestureDetector(
+                    onTap: () {
+                      print(widget.isFav);
+                      if (widget.isFav!) {
+                        removeFav();
+                      } else {
+                        addFav();
+                      }
+                      setState(() {
+                        widget.isFav = !widget.isFav!;
+                      });
                     },
-                icon: const Icon(Icons.arrow_back_outlined
-              )),
-            ),
-            SizedBox(
-              width: titleWidth,
-              child: Center(child: Text(widget.title!, style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold))),
-            ),
-            SizedBox(
-              width: rightIconWidth,
-              //child: Icon(Icons.favorite_border, color: Colors.red,),
-              child: GestureDetector(
-                onTap: () {
-                  print(widget.isFav);
-                  if(widget.isFav!){
-                    removeFav();
-                  } else {
-                    addFav();
-                  }
-                  setState(() {
-                    widget.isFav = !widget.isFav!;
-                  });
-                },
-                child: FavoriteWidget(isActive: widget.isFav!,)),
-            ),
-          ],
-        ));
-
+                    child: FavoriteWidget(
+                      isActive: widget.isFav!,
+                    )),
+              ),
+            ],
+          ));
     } else {
       return AppBar(
         backgroundColor: const Color.fromARGB(0, 0, 0, 0),
@@ -154,4 +172,3 @@ class _CustomAppBarState extends State<CustomAppBar> {
     }
   }
 }
-

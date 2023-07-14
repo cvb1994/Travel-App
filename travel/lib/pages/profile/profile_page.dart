@@ -25,7 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
   }
 
-  void fetchData() async{
+  void fetchData() async {
     userModel = await context.read<AuthProvider>().getUser().whenComplete(() {
       setState(() {
         isLoading = false;
@@ -37,7 +37,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     double paddingSizeWidth = MediaQuery.of(context).size.width * 0.05;
 
-    if(isLoading){
+    if (isLoading) {
       EasyLoading.show(status: 'loading...');
       return Container();
     }
@@ -74,7 +74,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 60,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
-                    child: Image.network(userModel.image!, fit: BoxFit.cover,),
+                    child: Image.network(
+                      userModel.image!,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -83,17 +86,15 @@ class _ProfilePageState extends State<ProfilePage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Hello, ${userModel.firstName!} ${userModel.lastName!}",
+                    Text(
+                      "Hello, ${userModel.firstName!} ${userModel.lastName!}",
                       style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold
-                      ),
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    Text(userModel.address!,
-                      style: const  TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold
-                      ),
+                    Text(
+                      userModel.address!,
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     )
                   ],
                 )
@@ -114,10 +115,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     border: Border.all(
                         color: const Color.fromARGB(255, 180, 178, 178),
                         width: 0.5)),
-                child: const Padding(
+                child: Padding(
                   padding: EdgeInsets.all(20),
                   child: Row(
-                    children: [
+                    children: const [
                       Expanded(child: Text("Personal Infomation")),
                       SizedBox(
                         width: 20,
@@ -138,10 +139,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   border: Border.all(
                       color: const Color.fromARGB(255, 180, 178, 178),
                       width: 0.5)),
-              child: const Padding(
+              child: Padding(
                 padding: EdgeInsets.all(20),
                 child: Row(
-                  children: [
+                  children: const [
                     Expanded(child: Text("FAQ")),
                     SizedBox(
                       width: 20,
@@ -159,12 +160,11 @@ class _ProfilePageState extends State<ProfilePage> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                      color: Color.fromARGB(255, 180, 178, 178),
-                      width: 0.5)),
-              child: const  Padding(
+                      color: Color.fromARGB(255, 180, 178, 178), width: 0.5)),
+              child: Padding(
                 padding: EdgeInsets.all(20),
                 child: Row(
-                  children: [
+                  children: const [
                     Expanded(child: Text("Logout")),
                   ],
                 ),

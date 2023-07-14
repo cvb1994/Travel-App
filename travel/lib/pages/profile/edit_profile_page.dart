@@ -39,7 +39,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     super.initState();
   }
 
-  void getUser() async{
+  void getUser() async {
     UserModel user = await context.read<AuthProvider>().getUser();
     firstNameController.text = user.firstName!;
     lastNameController.text = user.lastName!;
@@ -101,8 +101,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         if (xfilePick != null) {
           galleryFile = File(pickedFile!.path);
           urlImage = pickedFile.path;
-          context.read<AuthProvider>().uploadImage(galleryFile!, xfilePick.name);
-
+          context
+              .read<AuthProvider>()
+              .uploadImage(galleryFile!, xfilePick.name);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(// is this context <<<
               const SnackBar(content: Text('Nothing is selected')));
@@ -116,12 +117,14 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     CustomNotify notify = CustomNotify(context);
     double paddingSizeWidth = MediaQuery.of(context).size.width * 0.05;
 
-    void saveUser(){
+    void saveUser() {
       String firstName = firstNameController.text;
       String lastName = lastNameController.text;
       String phone = phoneController.text;
       String address = addressController.text;
-      context.read<AuthProvider>().updateUser(firstName, lastName, phone, address);
+      context
+          .read<AuthProvider>()
+          .updateUser(firstName, lastName, phone, address);
       FocusManager.instance.primaryFocus!.unfocus();
       notify.showCustomDialog("Update Successful");
     }
@@ -141,7 +144,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       body: SingleChildScrollView(
         //physics: const  NeverScrollableScrollPhysics(),
         child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: paddingSizeWidth, vertical: 5),
+            padding:
+                EdgeInsets.symmetric(horizontal: paddingSizeWidth, vertical: 5),
             child: Column(
               children: [
                 const Text(
@@ -162,12 +166,14 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                       width: 120,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
-                        child: !imageLoad ? Image.network(urlImage) : urlImage.isNotEmpty
-                            ? Image.file(
-                                File(urlImage),
-                                fit: BoxFit.cover,
-                              )
-                            : Image.asset("assets/image/user_default.png"),
+                        child: !imageLoad
+                            ? Image.network(urlImage)
+                            : urlImage.isNotEmpty
+                                ? Image.file(
+                                    File(urlImage),
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.asset("assets/image/user_default.png"),
                       ),
                     ),
                     Positioned(
@@ -186,16 +192,17 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                     color: Colors.grey.withOpacity(0.5),
                                     spreadRadius: 5,
                                     blurRadius: 7,
-                                    offset: Offset(0, 3), // changes position of shadow
+                                    offset: Offset(
+                                        0, 3), // changes position of shadow
                                   ),
                                 ],
                               ),
-                              child: const Padding(
-                                padding:  EdgeInsets.symmetric(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
                                     vertical: 5, horizontal: 20),
                                 child: Center(
                                   child: Row(
-                                    children:  [
+                                    children: const [
                                       Icon(
                                         Icons.camera_alt,
                                         size: 16,
